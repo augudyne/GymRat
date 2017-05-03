@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="By Muscle Group">
+        <menu>
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_chest"
+                android:icon="@drawable/ic_menu_chest"
+                android:title="Chest" />
+            <item
+                android:id="@+id/nav_back"
+                android:icon="@drawable/ic_menu_back"
+                android:title="Back" />
+            <item
+                android:id="@+id/nav_legs"
+                android:icon="@drawable/ic_menu_legs"
+                android:title="Legs" />
+            <item
+                android:id="@+id/nav_shoulders"
+                android:icon="@drawable/ic_menu_shoulder"
+                android:title="Shoulders" />
+            <item
+                android:id="@+id/nav_cardio"
+                android:icon="@drawable/ic_menu_cardio"
+                android:title="Cardio" />
+        </group>
+        </menu>
+    </item>
+
+
+</menu>

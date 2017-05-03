@@ -1,0 +1,44 @@
+{"Workouts": [
+  {
+    "Name": "Default Chest",
+    "Tags": ["chest"],
+    "Exercises": [
+      {"Name": "Bench Press", "Description": "Description for bench press", "Type": "BARBELL","Sets":[12,10,8,8]}
+    ]
+  },
+  {
+    "Name": "Default Chest2",
+    "Tags": ["chest"],
+    "Exercises": [
+      {"Name": "Bench Press", "Description": "Description for bench press", "Type": "BARBELL","Sets":[12,10,8,8]}
+    ]
+  },
+  {
+    "Name": "Default Back",
+    "Tags": ["back"],
+    "Exercises": [
+      {"Name": "Back Row", "Description": "Description for back row", "Type": "DUMBBELL", "Sets":[12,12,12,12]}
+    ]
+  },
+  {
+    "Name": "Default Leg",
+    "Tags": ["leg"],
+    "Exercises": [
+      {"Name": "Back Squat", "Description":"Description for back squat", "Type": "BARBELL", "Sets":[10,10,10,10]}
+    ]
+  },
+  {
+    "Name": "Default Shoulder",
+    "Tags": ["shoulder"],
+    "Exercises": [
+      {"Name": "Military Press", "Description": "Description for military press", "Type": "DUMBBELL", "Sets": [10,10,10]}
+    ]
+  },
+  {
+    "Name": "Default Cardio",
+    "Tags": ["cardio"],
+    "Exercises": [
+      {"Name": "Run", "Description": "Description for run", "Type": "CARDIO_FREE", "Sets": [10,10,10,10]}
+    ]
+  }
+]}
