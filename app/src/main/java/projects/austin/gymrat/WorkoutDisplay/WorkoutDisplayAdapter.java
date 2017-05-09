@@ -1,11 +1,9 @@
 package projects.austin.gymrat.WorkoutDisplay;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +14,14 @@ import java.util.List;
 import java.util.Locale;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.Exercise;
-import projects.austin.gymrat.model.Workout.WorkoutExercise;
+import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
 
 /**
  * Created by Austin on 2017-05-02.
  */
 
-public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutExercise>{
-    private List<WorkoutExercise> exerciseList;
+public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutInstanceExercise>{
+    private List<WorkoutInstanceExercise> exerciseList;
 
     private class ExerciseHolder{
         TextView title;
@@ -32,7 +29,7 @@ public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutExercise>{
         TextView displayExtraNumberInfo;
     }
 
-    public WorkoutDisplayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<WorkoutExercise> objects) {
+    public WorkoutDisplayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<WorkoutInstanceExercise> objects) {
         super(context, resource, objects);
         exerciseList = objects;
     }
@@ -57,12 +54,66 @@ public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutExercise>{
         }
 
         //now set the the values knowing we have all views in our holder
-        WorkoutExercise myExercise = exerciseList.get(position);
-        exerciseHolder.title.setText(myExercise.getExercise().getName());
-        exerciseHolder.description.setText(myExercise.getExercise().getDescription());
-        exerciseHolder.displayExtraNumberInfo.setText(String.format(Locale.CANADA, "%d",myExercise.getNumberOfSets()));
+        WorkoutInstanceExercise myExercise = exerciseList.get(position);
+        exerciseHolder.title.setText(myExercise.getName());
+        exerciseHolder.description.setText(myExercise.getDescription());
+        exerciseHolder.displayExtraNumberInfo.setText(String.format(Locale.CANADA, "%d", myExercise.getNumberOfSets()));
+        exerciseHolder.displayExtraNumberInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView textView = (TextView) view;
+                msgObject msgObject = (msgObject) view.getTag();
+                String[] viewTexts = msgObject.getTxtToDisplay();
+                if(msgObject.isDisplaySets()){
+                    textView.setText(viewTexts[0]);
+                } else {
+                    textView.setText(viewTexts[1]);
+                }
+                //alter the state on the tag
+                msgObject.toggleDisplayText();
+            }
+        });
+
+        //build the extraText info onClickListener
+        String[] txtViewText= {String.format(Locale.CANADA, "%d", myExercise.getNumberOfSets()),
+                String.format(Locale.CANADA, "%s", myExercise.getListOfReps().toString())};
+        msgObject myMsg = new msgObject(false, txtViewText);
+
+
+        exerciseHolder.displayExtraNumberInfo.setTag(myMsg);
 
         return result;
 
+    }
+
+    private class msgObject{
+        private boolean isDisplaySets;
+        private String [] txtToDisplay; //0 is for sets, 1 is for reps
+
+        private msgObject(boolean isDisplaySets, String[] txtToDisplay) {
+            this.isDisplaySets = isDisplaySets;
+            this.txtToDisplay = txtToDisplay;
+        }
+
+        public boolean isDisplaySets() {
+
+            return isDisplaySets;
+        }
+
+        public void setDisplaySets(boolean displaySets) {
+            isDisplaySets = displaySets;
+        }
+
+        public String[] getTxtToDisplay() {
+            return txtToDisplay;
+        }
+
+        public void setTxtToDisplay(String[] txtToDisplay) {
+            this.txtToDisplay = txtToDisplay;
+        }
+
+        public void toggleDisplayText(){
+            this.isDisplaySets = !this.isDisplaySets;
+        }
     }
 }

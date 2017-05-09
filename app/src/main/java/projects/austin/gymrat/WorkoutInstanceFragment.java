@@ -1,21 +1,26 @@
 package projects.austin.gymrat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 
-import projects.austin.gymrat.WorkoutDisplay.WorkoutDisplayAdapter;
-import projects.austin.gymrat.model.Workout.Workout;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import projects.austin.gymrat.WorkoutDisplay.WorkoutInstanceDisplayAdapter;
+import projects.austin.gymrat.model.Logs.WorkoutInstance;
+import projects.austin.gymrat.model.Logs.WorkoutLogManager;
 import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
 import projects.austin.gymrat.model.Workout.WorkoutManager;
 
@@ -23,20 +28,23 @@ import projects.austin.gymrat.model.Workout.WorkoutManager;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link WorkoutDisplayFragment.OnFragmentInteractionListener} interface
+ * {@link WorkoutInstanceFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WorkoutDisplayFragment#newInstance} factory method to
+ * Use the {@link WorkoutInstanceFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkoutDisplayFragment extends Fragment {
+public class WorkoutInstanceFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_WORKOUT_NAME = "workoutName";
+    private static final String TAG_FRAGMENT = "WorkoutInstanceFragment";
+
+    // TODO: Rename and change types of parameters
     private String workoutName;
-    private boolean onClickToggle;
+
     private OnFragmentInteractionListener mListener;
 
-    public WorkoutDisplayFragment() {
+    public WorkoutInstanceFragment() {
         // Required empty public constructor
     }
 
@@ -44,14 +52,14 @@ public class WorkoutDisplayFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param workoutName The name of the workout
-     * @return A new instance of fragment WorkoutDisplayFragment.
+     * @param theWorkoutName given list of strings of the exercises to do.
+     * @return A new instance of fragment WorkoutInstanceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WorkoutDisplayFragment newInstance(String workoutName) {
-        WorkoutDisplayFragment fragment = new WorkoutDisplayFragment();
+    public static WorkoutInstanceFragment newInstance(String theWorkoutName) {
+        WorkoutInstanceFragment fragment = new WorkoutInstanceFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_WORKOUT_NAME, workoutName);
+        args.putString(ARG_WORKOUT_NAME, theWorkoutName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,40 +76,37 @@ public class WorkoutDisplayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView =  inflater.inflate(R.layout.fragment_workout_display, container, false);
+        View myView = inflater.inflate(R.layout.fragment_workout_instance_fragment_layout, container, false);
+        WorkoutInstanceDisplayAdapter listViewAdapter = new WorkoutInstanceDisplayAdapter(getContext(),
+                R.layout.fragment_workout_instance_row_layout,
+                WorkoutManager.getInstance().getWorkout(workoutName).getExerciseList()
+                );
+        ListView myListView = (ListView) myView.findViewById(R.id.lv_workoutInstance);
+        myListView.setAdapter(listViewAdapter);
 
-        //setup the button
-        Button startWorkout = (Button) myView.findViewById(R.id.btn_startWorkout);
-        startWorkout.setOnClickListener(new View.OnClickListener() {
+        //setup the save workout button
+        Button saveWorkoutButton = (Button) myView.findViewById(R.id.btn_saveInstance);
+        saveWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: implement workout logging mode
-                Toast.makeText(getContext(), "This feature has not been implemented", Toast.LENGTH_SHORT).show();
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null);
-                ft.replace(R.id.fragment_layout_container, WorkoutInstanceFragment.newInstance(workoutName));
-                ft.commit();
+                WorkoutManager wm = WorkoutManager.getInstance();
+                List<WorkoutInstanceExercise> listOfWorkoutExercisesInThisInstance = getWorkoutExercises(getActivity());
+                List<String> listOfTags = wm.getWorkout(workoutName).getTags();
+                String date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA).format(new Date(System.currentTimeMillis()));
+                WorkoutInstance workoutInstance = new WorkoutInstance(workoutName, listOfWorkoutExercisesInThisInstance, listOfTags);
+                WorkoutLogManager.getInstance().addWorkoutInstance(workoutInstance);
+                Log.d(TAG_FRAGMENT, workoutInstance.toJSONObject().toString());
+                Toast.makeText(getContext(), "Saved workout instance " + workoutName, Toast.LENGTH_SHORT).show();
             }
         });
-
-        //get the workout
-        Workout myWorkout = WorkoutManager.getInstance().getWorkout(workoutName);
-
-        //get the views
-        TextView workoutName = (TextView) myView.findViewById(R.id.lbl_workoutName);
-        ListView exerciseList = (ListView) myView.findViewById(R.id.lv_exercises);
-
-        //populate the views
-        workoutName.setText(myWorkout.getName());
-        ArrayAdapter<WorkoutInstanceExercise> workoutExerciseAdapter = new WorkoutDisplayAdapter(getContext(),
-                R.layout.workout_display_item_row, myWorkout.getExerciseList());
-        exerciseList.setAdapter(workoutExerciseAdapter);
-
-
         return myView;
     }
 
-
+    public List<WorkoutInstanceExercise> getWorkoutExercises(Activity act){
+        ListView workoutExerciseListView = (ListView) act.findViewById(R.id.lv_workoutInstance);
+        WorkoutInstanceDisplayAdapter listAdapter = (WorkoutInstanceDisplayAdapter) workoutExerciseListView.getAdapter();
+        return listAdapter.getListOfExercises(act);
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

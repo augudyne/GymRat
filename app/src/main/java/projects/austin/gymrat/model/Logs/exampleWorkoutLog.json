@@ -1,0 +1,22 @@
+[
+  {
+    "Date":"Sat May 06 00:00:00 EDT 2017",
+    "WorkoutInstance":{
+      "Name":"Default_Chest2",
+      "ExerciseList":[
+        {
+          "Name":"Bench Press",
+          "Description":"Description for bench press",
+          "ExerciseType": "BARBELL",
+          "Reps":[
+            12,
+            10,
+            8,
+            8,
+            5
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,9 +1,5 @@
 package projects.austin.gymrat.model.Workout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,18 +11,18 @@ import java.util.Locale;
  * Created by Austin on 2017-05-02.
  */
 
-public class WorkoutsManager implements Iterable<Workout>{
+public class WorkoutManager implements Iterable<Workout>{
     //singleton design pattern, holds all the workouts that one could do
-    private static WorkoutsManager instance = null;
+    private static WorkoutManager instance = null;
     private HashMap<String, Workout> workoutCollection;
 
-    private WorkoutsManager() {
+    private WorkoutManager() {
         workoutCollection = new HashMap<>();
     }
 
-    public static WorkoutsManager getInstance(){
+    public static WorkoutManager getInstance(){
         if(instance == null){
-            instance = new WorkoutsManager();
+            instance = new WorkoutManager();
         }
         return instance;
     }

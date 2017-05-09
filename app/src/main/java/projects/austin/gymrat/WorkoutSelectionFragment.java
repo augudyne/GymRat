@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import projects.austin.gymrat.model.Workout.WorkoutsManager;
+import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 
 /**
@@ -75,7 +75,7 @@ public class WorkoutSelectionFragment extends Fragment {
         Spinner workoutSelection = (Spinner) myView.findViewById(R.id.spn_selectWorkout);
         ArrayList<CharSequence> workoutOptionsList = new ArrayList<>();
         workoutOptionsList.add("Select a workout...");
-        workoutOptionsList.addAll(WorkoutsManager.getInstance().getWorkoutsAsList(muscleGroup));
+        workoutOptionsList.addAll(WorkoutManager.getInstance().getWorkoutsAsList(muscleGroup));
         ArrayAdapter<CharSequence> workoutOptionsAdapter =
                 new ArrayAdapter<CharSequence>(getActivity(), R.layout.workout_selection_dropdown_item, workoutOptionsList);
         workoutSelection.setSelection(0, false);

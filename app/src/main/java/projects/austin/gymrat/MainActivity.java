@@ -2,7 +2,6 @@ package projects.austin.gymrat;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +13,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import projects.austin.gymrat.model.Workout.WorkoutsManager;
+import org.json.JSONArray;
+
+import projects.austin.gymrat.model.Logs.WorkoutLogManager;
+import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.providers.WorkoutLogIO;
 import projects.austin.gymrat.providers.WorkoutsIO;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         WorkoutSelectionFragment.OnFragmentInteractionListener,
         TemporaryLandingFragment.OnFragmentInteractionListener,
-        WorkoutDisplayFragment.OnFragmentInteractionListener{
+        WorkoutDisplayFragment.OnFragmentInteractionListener,
+        WorkoutInstanceFragment.OnFragmentInteractionListener,
+        DisplayLogsFragment.OnFragmentInteractionListener {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //save my workouts to the file
+        JSONArray workoutsAsJSON = WorkoutLogManager.getInstance().toJSONArray();
+        WorkoutLogIO.getInstance().writeLogsToFile(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
         //populate our workouts
         if(WorkoutsIO.getInstance().getJSONAndLoad(this, false)){
-            System.out.println(WorkoutsManager.getInstance().toString());
+            System.out.println(WorkoutManager.getInstance().toString());
         };
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -111,10 +123,16 @@ public class MainActivity extends AppCompatActivity
             tagParam = "shoulder";
         } else if (id == R.id.nav_cardio) {
             tagParam = "cardio";
+        } else if (id == R.id.nav_logs) {
+            tagParam = "logs";
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_layout_container, WorkoutSelectionFragment.newInstance(tagParam));
+        if (tagParam.equals("logs")) {
+            ft.replace(R.id.fragment_layout_container, DisplayLogsFragment.newInstance());
+        } else {
+            ft.replace(R.id.fragment_layout_container, WorkoutSelectionFragment.newInstance(tagParam));
+        }
         ft.addToBackStack(null);
         ft.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

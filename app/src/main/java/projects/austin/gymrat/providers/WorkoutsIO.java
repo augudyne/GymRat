@@ -16,11 +16,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.Exercise;
 import projects.austin.gymrat.model.Workout.ExerciseType;
 import projects.austin.gymrat.model.Workout.Workout;
-import projects.austin.gymrat.model.Workout.WorkoutExercise;
-import projects.austin.gymrat.model.Workout.WorkoutsManager;
+import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 /**
  * Created by Austin on 2017-05-02.
@@ -53,8 +52,7 @@ public class WorkoutsIO {
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-            System.out.println(sb.toString());
-            return new JSONObject(sb.toString());
+           return new JSONObject(sb.toString());
         } catch (FileNotFoundException fileNotFoundException) {
             //create the default workout file (add to to resources?)
             System.out.println("File Not Found Exception in WorkoutsIO");
@@ -85,7 +83,7 @@ public class WorkoutsIO {
 
                 //get the exercises in the workout
                 JSONArray woExercises = workoutObject.getJSONArray("Exercises");
-                ArrayList<WorkoutExercise> bufferList = new ArrayList<>();
+                ArrayList<WorkoutInstanceExercise> bufferList = new ArrayList<>();
                 for(int j = 0; j < woExercises.length(); j++) {
                     //parse an exercise, has a name, description, type, number of sets, and a list of the sets
                     JSONObject exerciseObject = woExercises.getJSONObject(j);
@@ -99,11 +97,11 @@ public class WorkoutsIO {
                     for(int k = 0; k < exerciseSets.length();k++){
                         listOfReps.add(exerciseSets.getInt(k));
                     }
-                    bufferList.add(new WorkoutExercise(new Exercise(name, description, type), listOfReps.size(), listOfReps));
+                    bufferList.add(new WorkoutInstanceExercise(name, description, type , listOfReps));
                 }
 
                 //add the workout to the manager
-                WorkoutsManager.getInstance().addWorkout(new Workout(woName, bufferList, bufferTagsList));
+                WorkoutManager.getInstance().addWorkout(new Workout(woName, bufferList, bufferTagsList));
             }
         } catch (JSONException jse){
             System.out.println("Unable to load a workout object from the given JSONArray");
