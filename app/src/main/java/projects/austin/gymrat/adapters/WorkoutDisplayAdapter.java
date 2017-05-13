@@ -1,4 +1,4 @@
-package projects.austin.gymrat.WorkoutDisplay;
+package projects.austin.gymrat.adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import projects.austin.gymrat.adapters.WorkoutLogDisplayAdapter;
 import projects.austin.gymrat.model.Logs.WorkoutLogManager;
 import projects.austin.gymrat.providers.WorkoutLogIO;
 
@@ -16,17 +17,17 @@ import projects.austin.gymrat.providers.WorkoutLogIO;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DisplayLogsFragment.OnFragmentInteractionListener} interface
+ * {@link WorkoutLogsDisplayFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DisplayLogsFragment#newInstance} factory method to
+ * Use the {@link WorkoutLogsDisplayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DisplayLogsFragment extends Fragment {
+public class WorkoutLogsDisplayFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
 
-    public DisplayLogsFragment() {
+    public WorkoutLogsDisplayFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +35,11 @@ public class DisplayLogsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment DisplayLogsFragment.
+     * @return A new instance of fragment WorkoutLogsDisplayFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DisplayLogsFragment newInstance() {
-        DisplayLogsFragment fragment = new DisplayLogsFragment();
+    public static WorkoutLogsDisplayFragment newInstance() {
+        WorkoutLogsDisplayFragment fragment = new WorkoutLogsDisplayFragment();
         Bundle args = new Bundle();
         return fragment;
     }

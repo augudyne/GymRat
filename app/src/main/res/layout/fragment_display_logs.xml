@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="projects.austin.gymrat.DisplayLogsFragment">
+    tools:context="projects.austin.gymrat.WorkoutLogsDisplayFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

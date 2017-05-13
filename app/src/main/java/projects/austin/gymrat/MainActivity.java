@@ -2,8 +2,8 @@ package projects.austin.gymrat;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
         TemporaryLandingFragment.OnFragmentInteractionListener,
         WorkoutDisplayFragment.OnFragmentInteractionListener,
         WorkoutInstanceFragment.OnFragmentInteractionListener,
-        DisplayLogsFragment.OnFragmentInteractionListener {
+        WorkoutLogsDisplayFragment.OnFragmentInteractionListener {
     @Override
     protected void onPause() {
         super.onPause();
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (tagParam.equals("logs")) {
-            ft.replace(R.id.fragment_layout_container, DisplayLogsFragment.newInstance());
+            ft.replace(R.id.fragment_layout_container, WorkoutLogsDisplayFragment.newInstance());
         } else {
             ft.replace(R.id.fragment_layout_container, WorkoutSelectionFragment.newInstance(tagParam));
         }

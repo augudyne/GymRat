@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import projects.austin.gymrat.WorkoutDisplay.WorkoutDisplayAdapter;
+import projects.austin.gymrat.adapters.WorkoutDisplayAdapter;
 import projects.austin.gymrat.model.Workout.Workout;
 import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
 import projects.austin.gymrat.model.Workout.WorkoutManager;

@@ -9,17 +9,21 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import projects.austin.gymrat.model.Workout.Workout;
 import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.exceptions.ExerciseNotFoundException;
+import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
 
 /**
  * Created by Austin on 2017-05-05.
+ * Same as Workout, but has a date, and the ability to modify its fields
  */
+
 
 public class WorkoutInstance extends Workout {
     private String date;
-    private List<WorkoutInstanceExercise> listOfExercises;
 
     /**
      * Constructor for WorkoutInstance, for when the Date is recorded as current time
@@ -33,6 +37,20 @@ public class WorkoutInstance extends Workout {
     }
 
     /**
+     * Make a copy of the workout, and then set the date
+     * @param workoutSuper the workout to create the instance from
+
+     */
+    public WorkoutInstance(Workout workoutSuper){
+        super.name = workoutSuper.getName();
+        super.exerciseDictionary = workoutSuper.getExerciseDictionary();
+        super.tags = workoutSuper.getTags();
+        this.date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA).format(new Date(System.currentTimeMillis()));
+
+    }
+
+
+    /**
      * Constructor for WorkoutInstance, for when the Date is provided by the record (DatabaseIO)
      * @param date the Date on which the WorkoutInstance occurred
      * @param name the name of the workout
@@ -40,10 +58,7 @@ public class WorkoutInstance extends Workout {
      * @param tags the tags associated with this workout
      */
     private WorkoutInstance(String date, String name, List<WorkoutInstanceExercise> exerciseList, List<String> tags) {
-        super();
-        super.name = name;
-        super.tags = tags;
-        this.listOfExercises = exerciseList;
+        super(name, exerciseList, tags);
         this.date = date;
     }
 
@@ -78,6 +93,31 @@ public class WorkoutInstance extends Workout {
     }
 
 
+    /**
+     * Attempts to change the number of reps at index x of exercise [key]
+     * @param exerciseKey the key of the exercise to change : String
+     * @param index the index position of the rep to modify : int
+     * @return true if successfully changed, false otherwise. Throws exercise not found exception
+     */
+    public boolean modifyReps(String exerciseKey, int index, int newValue) throws ExerciseNotFoundException {
+        try {
+            exerciseDictionary.get(exerciseKey).changeRepNumber(index, newValue);
+            return true;
+        } catch (InvalidRepIndexException ire){
+            //thrown when trying to change rep number, but rep index does not exist
+            ire.printStackTrace();
+            return false;
+        } catch (NullPointerException npe) {
+            //thrown when the exercise was not found in the keys
+            throw new ExerciseNotFoundException("Unable to find exercise: " + exerciseKey + " in " + name);
+        }
+    }
+
+    public int addSet(String exerciseKey, int index, int newValue) {
+        exerciseDictionary.get(exerciseKey).addSet();
+        return exerciseDictionary.get(exerciseKey).getNumberOfSets();
+    }
+
     public JSONObject toJSONObject(Context cxt){
         JSONObject workoutInstanceAsJSON = new JSONObject();
         try {
@@ -93,5 +133,6 @@ public class WorkoutInstance extends Workout {
         }
 
     }
+
 
 }

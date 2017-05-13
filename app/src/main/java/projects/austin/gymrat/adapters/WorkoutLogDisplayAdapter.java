@@ -1,4 +1,4 @@
-package projects.austin.gymrat;
+package projects.austin.gymrat.adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import projects.austin.gymrat.R;
 import projects.austin.gymrat.model.Logs.WorkoutInstance;
 
 /**

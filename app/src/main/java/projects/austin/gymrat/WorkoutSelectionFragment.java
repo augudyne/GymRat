@@ -91,8 +91,6 @@ public class WorkoutSelectionFragment extends Fragment {
                     ft.replace(R.id.fragment_layout_container, WorkoutDisplayFragment.newInstance(selectedItem.toString()));
                     ft.commit();
                 }
-                System.out.println("Making sure that the selection was proccd");
-                System.out.println(check);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {

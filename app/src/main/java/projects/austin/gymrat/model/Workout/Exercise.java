@@ -1,6 +1,5 @@
 package projects.austin.gymrat.model.Workout;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

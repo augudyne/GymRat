@@ -5,12 +5,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -18,10 +18,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import projects.austin.gymrat.WorkoutDisplay.WorkoutInstanceDisplayAdapter;
+import projects.austin.gymrat.adapters.WorkoutInstanceDisplayAdapter;
 import projects.austin.gymrat.model.Logs.WorkoutInstance;
 import projects.austin.gymrat.model.Logs.WorkoutLogManager;
 import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Workout.WorkoutInstanceManager;
 import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 
@@ -41,6 +42,7 @@ public class WorkoutInstanceFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String workoutName;
+    private WorkoutInstance currentWorkoutInstance;
 
     private OnFragmentInteractionListener mListener;
 
@@ -69,6 +71,9 @@ public class WorkoutInstanceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             workoutName = getArguments().getString(ARG_WORKOUT_NAME);
+            WorkoutInstanceManager wm = WorkoutInstanceManager.getInstance();
+            wm.setCurrentWorkoutInstance(WorkoutManager.getInstance().getWorkout(workoutName));
+            this.currentWorkoutInstance = wm.getCurrentWorkoutInstance();
         }
     }
 
@@ -89,24 +94,15 @@ public class WorkoutInstanceFragment extends Fragment {
         saveWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WorkoutManager wm = WorkoutManager.getInstance();
-                List<WorkoutInstanceExercise> listOfWorkoutExercisesInThisInstance = getWorkoutExercises(getActivity());
-                List<String> listOfTags = wm.getWorkout(workoutName).getTags();
-                String date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA).format(new Date(System.currentTimeMillis()));
-                WorkoutInstance workoutInstance = new WorkoutInstance(workoutName, listOfWorkoutExercisesInThisInstance, listOfTags);
-                WorkoutLogManager.getInstance().addWorkoutInstance(workoutInstance);
-                Log.d(TAG_FRAGMENT, workoutInstance.toJSONObject().toString());
+                WorkoutInstance workoutToSave = WorkoutInstanceManager.getInstance().getCurrentWorkoutInstance();
+                Log.d(TAG_FRAGMENT, workoutToSave.toJSONObject().toString());
                 Toast.makeText(getContext(), "Saved workout instance " + workoutName, Toast.LENGTH_SHORT).show();
             }
         });
         return myView;
     }
 
-    public List<WorkoutInstanceExercise> getWorkoutExercises(Activity act){
-        ListView workoutExerciseListView = (ListView) act.findViewById(R.id.lv_workoutInstance);
-        WorkoutInstanceDisplayAdapter listAdapter = (WorkoutInstanceDisplayAdapter) workoutExerciseListView.getAdapter();
-        return listAdapter.getListOfExercises(act);
-    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

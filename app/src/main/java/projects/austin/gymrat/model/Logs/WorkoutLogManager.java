@@ -1,25 +1,14 @@
 package projects.austin.gymrat.model.Logs;
 
-import android.content.Context;
-import android.os.SystemClock;
-import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-
-import projects.austin.gymrat.model.Workout.Workout;
 
 /**
  * Created by Austin on 2017-05-05.

@@ -1,66 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_instanceRowRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorMainBackground"
     android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_instanceRowRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/btn_addSet">
 
-        <LinearLayout
-            android:id="@+id/ly_overallContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+    </android.support.v7.widget.RecyclerView>
 
-            <RelativeLayout
-                android:id="@+id/ly_nRepsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/lbl_exerciseTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exercise Title Placeholder"
+        android:textSize="24sp" />
 
-                <LinearLayout
-                    android:id="@+id/ly_numberOfRepsHolder"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_toStartOf="@+id/ibtn_addSetButton"
-                    android:gravity="top|end"
-                    android:orientation="horizontal"></LinearLayout>
+    <TextView
+        android:id="@+id/lbl_exerciseDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lbl_exerciseTitle"
+        android:text="Exercise Description Placeholder"
+        android:textSize="18sp" />
 
-                <ImageButton
-                    android:id="@+id/ibtn_addSetButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@android:drawable/ic_menu_add" />
-            </RelativeLayout>
-        </LinearLayout>
+    <Button
+        android:id="@+id/btn_addSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Button" />
 
-        <TextView
-            android:id="@+id/lbl_exName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textAlignment="viewStart"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/lbl_exDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/lbl_exName"
-            android:text="TextView"
-            android:textAlignment="viewStart"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

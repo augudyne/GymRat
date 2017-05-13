@@ -7,6 +7,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+
+import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
 
 /**
  * Created by Austin on 2017-05-08.
@@ -81,6 +84,20 @@ public class WorkoutInstanceExercise extends Exercise {
     public void addSet(){
         numberOfSets++;
         listOfReps.add(0);
+    }
+
+    /**
+     * Attempts to change the rep number at reps[index] to newValue
+     * @param index the index of the rep (e.g. position in setInputContainer)
+     * @param newValue the value to set it to (parse int from the edittext
+     * @return true if successful, false otherwise
+     */
+    public void changeRepNumber(int index, int newValue) throws InvalidRepIndexException {
+        if (!(index < listOfReps.size())) {
+            throw new InvalidRepIndexException(String.format(Locale.CANADA, "Number of Reps: %d\nIndex Given: %d", listOfReps.size(), index));
+        }
+        listOfReps.remove(index);
+        listOfReps.add(index, newValue);
     }
 
 

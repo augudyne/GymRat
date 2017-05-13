@@ -6,9 +6,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
-import projects.austin.gymrat.model.Logs.WorkoutInstance;
+import java.util.Map;
 
 /**
  * Created by Austin on 2017-05-02.
@@ -17,7 +17,7 @@ import projects.austin.gymrat.model.Logs.WorkoutInstance;
 
 public class Workout {
     protected String name;
-    protected List<WorkoutInstanceExercise> exerciseList;
+    protected Map<String, WorkoutInstanceExercise> exerciseDictionary;
     protected List<String> tags;
 
 
@@ -26,7 +26,11 @@ public class Workout {
     }
 
     public List<WorkoutInstanceExercise> getExerciseList() {
-        return Collections.unmodifiableList(exerciseList);
+        return Collections.unmodifiableList(new ArrayList<WorkoutInstanceExercise>(exerciseDictionary.values()));
+    }
+
+    public Map<String, WorkoutInstanceExercise> getExerciseDictionary() {
+        return exerciseDictionary;
     }
 
     public List<String> getTags() {
@@ -35,23 +39,36 @@ public class Workout {
 
     public Workout(String name, List<WorkoutInstanceExercise> exerciseList, List<String> tags) {
         this.name = name;
-        this.exerciseList = exerciseList;
+        this.exerciseDictionary = new HashMap<>();
+        for (WorkoutInstanceExercise we : exerciseList) {
+            this.exerciseDictionary.put(we.getName(), we);
+        }
         this.tags = tags;
     }
+
+
 
     public boolean hasTag(String tag){
         return tags.contains(tag);
     }
 
     public void addExercise(WorkoutInstanceExercise exercise){
-        this.exerciseList.add(exercise);
+        this.exerciseDictionary.put(exercise.getName(), exercise);
     }
 
-    public void removeExercise(Exercise exercise) {
-        if(this.exerciseList.contains(exercise)){
-            this.exerciseList.remove(exercise);
+    public void removeExercise(WorkoutInstanceExercise exercise) {
+        if(this.exerciseDictionary.containsKey(exercise.getName())){
+            this.exerciseDictionary.remove(exercise.getName());
         }
     }
+
+    public void removeExercise(Exercise exercise){
+        if(this.exerciseDictionary.containsKey(exercise.getName())){
+            this.exerciseDictionary.remove(exercise.getName());
+        }
+    }
+
+
 
     protected Workout(){
         //empty constructor for children
@@ -67,7 +84,10 @@ public class Workout {
             List<String> listOfTags = getTagsFromJSON(myWorkoutObject);
 
             this.name = nameBuffer;
-            this.exerciseList = listOfExercises;
+            this.exerciseDictionary = new HashMap<>();
+            for (WorkoutInstanceExercise we : listOfExercises) {
+                this.exerciseDictionary.put(we.getName(), we);
+            }
             this.tags = listOfTags;
         } catch (JSONException ex) {
             ex.printStackTrace();
@@ -80,8 +100,8 @@ public class Workout {
         try {
             myJSONObject.put("Name", name);
             JSONArray jsonArray = new JSONArray();
-            for (Exercise e : exerciseList) {
-                jsonArray.put(e.toJSONObject());
+            for (WorkoutInstanceExercise we : exerciseDictionary.values()) {
+                jsonArray.put(we.toJSONObject());
             }
             myJSONObject.put("ExerciseList", jsonArray);
             return myJSONObject;
