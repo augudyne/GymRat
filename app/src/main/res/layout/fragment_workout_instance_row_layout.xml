@@ -4,7 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorMainBackground"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal">
+
+
+
+    <TextView
+        android:id="@+id/lbl_exerciseTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Exercise Title Placeholder"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/lbl_exerciseDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lbl_exerciseTitle"
+        android:text="Exercise Description Placeholder"
+        android:textSize="10sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_instanceRowRecyclerView"
@@ -14,26 +32,21 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <TextView
-        android:id="@+id/lbl_exerciseTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exercise Title Placeholder"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/lbl_exerciseDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lbl_exerciseTitle"
-        android:text="Exercise Description Placeholder"
-        android:textSize="18sp" />
-
     <Button
         android:id="@+id/btn_addSet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:text="Button" />
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/btn_removeSet"
+        android:text="+"
+        android:textSize="12sp" />
+    <Button
+        android:id="@+id/btn_removeSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="12sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

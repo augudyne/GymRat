@@ -5,10 +5,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -87,8 +90,28 @@ public class WorkoutInstanceFragment extends Fragment {
                 WorkoutManager.getInstance().getWorkout(workoutName).getExerciseList()
                 );
         ListView myListView = (ListView) myView.findViewById(R.id.lv_workoutInstance);
+
         myListView.setAdapter(listViewAdapter);
 
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //when a row is selected, toggle between the rest timer and workout view
+                Log.d(TAG_FRAGMENT, "Row " + i + " was selected");
+                WorkoutInstanceDisplayAdapter myAdapter = (WorkoutInstanceDisplayAdapter) adapterView.getAdapter();
+                WorkoutInstanceExercise myExercise =  myAdapter.getItem(i);
+                Log.d(TAG_FRAGMENT, myExercise.toString());
+                if(myExercise != null && myExercise.getRestInterval() != 0){
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.fragment_layout_container, TimerFragment.newInstance(myExercise.getRestInterval()));
+                    ft.addToBackStack(null);
+                    ft.commit();
+                } else {
+                    //show toast
+                    Toast.makeText(getContext(), "No rest interval for this exercise", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         //setup the save workout button
         Button saveWorkoutButton = (Button) myView.findViewById(R.id.btn_saveInstance);
         saveWorkoutButton.setOnClickListener(new View.OnClickListener() {

@@ -37,6 +37,11 @@ public class WorkoutLogIO {
         return instance;
     }
 
+    /**
+     * Fetch the WorkoutLogs file from disk, returning null if not found
+     * @param cxt the Context requesting the WorkoutLog
+     * @return the JSONArray of logs or null
+     */
     public JSONArray getJSONFromFileOrNull(Context cxt) {
         try {
             InputStream fileInput = cxt.openFileInput(WORKOUT_LOGS_FILE_NAME);
@@ -60,6 +65,11 @@ public class WorkoutLogIO {
         }
     }
 
+    /**
+     * Saves the current workout logs to file
+     * @param cxt The Context that wants to save logs
+     * @return true if handled, otherwise false
+     */
     public boolean writeLogsToFile(Context cxt){
         try {
             OutputStream fileOutput = cxt.openFileOutput(WORKOUT_LOGS_FILE_NAME, Context.MODE_PRIVATE);
@@ -75,6 +85,11 @@ public class WorkoutLogIO {
         }
     }
 
+    /**
+     * Fetch the WorkoutLogs file from disk and load into manager, does not flag errors
+     * - Use other version for stability
+     * @param cxt the Context requesting the WorkoutLog
+     */
     public void loadLogsFromFile(Context cxt){
         //get the file and pass the objects to the WorkoutLogManager
         try {

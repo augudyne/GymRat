@@ -10,7 +10,10 @@
     "Name": "Default Chest2",
     "Tags": ["chest"],
     "Exercises": [
-      {"Name": "Bench Press", "Description": "Description for bench press", "Type": "BARBELL","Sets":[12,10,8,8]}
+
+      {"Name": "Incline Press", "Description": "Description for incline press", "Type": "BARBELL", "Sets": [12,12,12,12], "Rest": 90},
+      {"Name": "Bench Press", "Description": "Description for bench press", "Type": "BARBELL","Sets":[12,10,8,8], "Rest": 15}
+
     ]
   },
   {

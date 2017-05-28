@@ -42,7 +42,12 @@ public class WorkoutsIO {
         return instance;
     }
 
-    /* Returns JSON if successful, else return the default one*/
+
+    /**
+     * Loaidng the JSON of Workouts stored on disk.
+     * @param myContext the context of the request for IO (to access the file)
+     * @return the JSONObject on disk or the default workouts from raw assets
+     */
     public JSONObject getJSONDisk(Context myContext) {
         try {
             InputStream ioStream = myContext.openFileInput(WORKOUTS_FILE_NAME);
@@ -66,6 +71,11 @@ public class WorkoutsIO {
         }
     }
 
+    /**
+     * Wipes the current database of workouts and replaces it with toLoad
+     * @param toLoad the new workoutDatabase to load : JSONARRAY
+     * @param cxt the context that is making this request
+     */
     public void resetDatabaseFromJSON(JSONArray toLoad, Context cxt){
         /* !! Warning, will wipe and repopulate from JSONArray of workouts !! */
         try {
@@ -97,7 +107,13 @@ public class WorkoutsIO {
                     for(int k = 0; k < exerciseSets.length();k++){
                         listOfReps.add(exerciseSets.getInt(k));
                     }
-                    bufferList.add(new WorkoutInstanceExercise(name, description, type , listOfReps));
+                    int rest;
+                    try {
+                         rest = exerciseObject.getInt("Rest");
+                    } catch (JSONException jse){
+                        rest = 0;
+                    }
+                    bufferList.add(new WorkoutInstanceExercise(name, description, type , listOfReps, rest));
                 }
 
                 //add the workout to the manager
@@ -110,6 +126,12 @@ public class WorkoutsIO {
     }
 
     /* Returns the JSONObject of the default workouts */
+
+    /**
+     * Returns the default workouts from raw assets.
+     * @param myContext the context that is making this request
+     * @return the default workouts as  JSONObject
+     */
     private JSONObject getDefaultWorkouts(Context myContext){
         InputStream is = myContext.getResources().openRawResource(R.raw.default_workouts);
         try {
@@ -136,7 +158,13 @@ public class WorkoutsIO {
         }
     }
 
-    //returns true if handled, and false otherwise
+    /**
+     * A wrapper function for fetching from disk and loading into database (composite)
+     * @param cxt the context making this request
+     * @param resetDefault if true, will override workoutlog with default from raw assets
+     *
+     * @return true if handled, false otherwise
+     */
     public boolean getJSONAndLoad(Context cxt, boolean resetDefault){
         JSONObject toLoad;
         if(resetDefault){

@@ -16,24 +16,35 @@ import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
  */
 
 public class WorkoutInstanceExercise extends Exercise {
-    private List<Integer> listOfReps;
-    private int numberOfSets;
+    private List<Integer> listOfReps; //The list reps in each set
+    private int restInterval; //The rest between sets in seconds
+    private int numberOfSets;  //The number of total sets
 
 
-    public WorkoutInstanceExercise(String name, String description, ExerciseType exerciseType, List<Integer> listOfReps) {
+    public WorkoutInstanceExercise(String name, String description, ExerciseType exerciseType, List<Integer> listOfReps, int restInterval) {
         super(name, description, exerciseType);
         this.listOfReps = listOfReps;
         this.numberOfSets = listOfReps.size();
+        this.restInterval = restInterval;
     }
 
-    public static WorkoutInstanceExercise newInstance(String workoutInstanceAsJSONString) {
+
+    public WorkoutInstanceExercise(String name, String description, ExerciseType exerciseType, List<Integer> listOfReps) {
+        this(name, description, exerciseType, listOfReps, 0);
+    }
+
+
+
+    public static WorkoutInstanceExercise getWorkoutInstanceExerciseFromJSONString(String workoutInstanceAsJSONString) {
         try {
             JSONObject exerciseJSON = new JSONObject(workoutInstanceAsJSONString);
             String name = exerciseJSON.getString("Name");
             String description = exerciseJSON.getString("Description");
+            int restInterval = 0;
+            if(exerciseJSON.has("Rest")) restInterval = exerciseJSON.getInt("Rest");
             ExerciseType exerciseType = ExerciseType.getTypeFromString(exerciseJSON.getString("ExerciseType"));
             List<Integer> listOfReps = listOfRepsFromJSONArray(exerciseJSON.getJSONArray("Reps"));
-            return new WorkoutInstanceExercise(name, description, exerciseType, listOfReps);
+            return new WorkoutInstanceExercise(name, description, exerciseType, listOfReps, restInterval);
         } catch (JSONException jse) {
             jse.printStackTrace();
             return null;
@@ -81,16 +92,24 @@ public class WorkoutInstanceExercise extends Exercise {
         return listOfReps;
     }
 
+    public int getRestInterval() {
+        return restInterval;
+    }
+
     public void addSet(){
         numberOfSets++;
         listOfReps.add(0);
+    }
+
+    public void removeSet(){
+        numberOfSets--;
+        listOfReps.remove(listOfReps.size() - 1);
     }
 
     /**
      * Attempts to change the rep number at reps[index] to newValue
      * @param index the index of the rep (e.g. position in setInputContainer)
      * @param newValue the value to set it to (parse int from the edittext
-     * @return true if successful, false otherwise
      */
     public void changeRepNumber(int index, int newValue) throws InvalidRepIndexException {
         if (!(index < listOfReps.size())) {

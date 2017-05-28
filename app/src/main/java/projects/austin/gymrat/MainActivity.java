@@ -26,7 +26,9 @@ public class MainActivity extends AppCompatActivity
         TemporaryLandingFragment.OnFragmentInteractionListener,
         WorkoutDisplayFragment.OnFragmentInteractionListener,
         WorkoutInstanceFragment.OnFragmentInteractionListener,
-        WorkoutLogsDisplayFragment.OnFragmentInteractionListener {
+        WorkoutLogsDisplayFragment.OnFragmentInteractionListener,
+        TimerFragment.OnFragmentInteractionListener,
+        NewWorkoutFragment.OnFragmentInteractionListener{
     @Override
     protected void onPause() {
         super.onPause();
@@ -65,7 +67,8 @@ public class MainActivity extends AppCompatActivity
 
 
         //populate our workouts
-        if(WorkoutsIO.getInstance().getJSONAndLoad(this, false)){
+        if(WorkoutsIO.getInstance().getJSONAndLoad(this, true)){
+            //todo: reset this flag to false
             System.out.println(WorkoutManager.getInstance().toString());
         };
 

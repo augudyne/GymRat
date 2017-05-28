@@ -128,7 +128,7 @@ public class Workout {
         List<WorkoutInstanceExercise> listOfExercises = new ArrayList<>();
         for(int i = 0; i < arrayOfExercises.length(); i++) {
             String myExerciseAsString = arrayOfExercises.getString(i);
-            WorkoutInstanceExercise exerciseInstance = WorkoutInstanceExercise.newInstance(myExerciseAsString);
+            WorkoutInstanceExercise exerciseInstance = WorkoutInstanceExercise.getWorkoutInstanceExerciseFromJSONString(myExerciseAsString);
             listOfExercises.add(exerciseInstance);
         }
         return listOfExercises;

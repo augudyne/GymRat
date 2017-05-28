@@ -1,6 +1,8 @@
 package projects.austin.gymrat;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -68,32 +72,64 @@ public class WorkoutSelectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView = inflater.inflate(R.layout.fragment_workout_selection, container, false);
+        final View myView = inflater.inflate(R.layout.fragment_workout_selection, container, false);
 
+        //create the 'create workout' button
+        Button btn_createWorkout = (Button) myView.findViewById(R.id.btn_createWorkout);
+        btn_createWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.addToBackStack(null);
+                ft.replace(R.id.fragment_layout_container, NewWorkoutFragment.newInstance(muscleGroup));
+                ft.commit();
+            }
+        });
 
         //populate the spinner entries
-        Spinner workoutSelection = (Spinner) myView.findViewById(R.id.spn_selectWorkout);
-        ArrayList<CharSequence> workoutOptionsList = new ArrayList<>();
-        workoutOptionsList.add("Select a workout...");
+        ListView workoutSelection = (ListView) myView.findViewById(R.id.lv_workoutsList);
+        final ArrayList<CharSequence> workoutOptionsList = new ArrayList<>();
         workoutOptionsList.addAll(WorkoutManager.getInstance().getWorkoutsAsList(muscleGroup));
-        ArrayAdapter<CharSequence> workoutOptionsAdapter =
-                new ArrayAdapter<CharSequence>(getActivity(), R.layout.workout_selection_dropdown_item, workoutOptionsList);
-        workoutSelection.setSelection(0, false);
+        final ArrayAdapter<CharSequence> workoutOptionsAdapter =
+                new ArrayAdapter<CharSequence>(getActivity(), R.layout.workout_selection_item, workoutOptionsList);
         workoutSelection.setAdapter(workoutOptionsAdapter);
-        workoutSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        workoutSelection.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (++check > 1 && i != 0) {
-                    CharSequence selectedItem = (CharSequence) adapterView.getItemAtPosition(i);
-                    Toast.makeText(getActivity(), "Selected workout: " + selectedItem, Toast.LENGTH_LONG).show();
-                    //show the fragment
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.fragment_layout_container, WorkoutDisplayFragment.newInstance(selectedItem.toString()));
-                    ft.commit();
-                }
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CharSequence selectedItem = workoutOptionsAdapter.getItem(i);
+                Toast.makeText(getActivity(), "Selected workout: " + selectedItem, Toast.LENGTH_LONG).show();
+                //show the fragment
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_layout_container, WorkoutDisplayFragment.newInstance(selectedItem.toString()));
+                ft.commit();
             }
+        });
+        workoutSelection.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //build confirm dialog, and delete if neccessary
+                final String workoutSelected = workoutOptionsList.get(i).toString();
+                AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
+                TextView dialogText = new TextView(getContext());
+                deleteDialog.setView(dialogText);
+                dialogText.setText("Are you sure you wish to delete " + workoutSelected + "?");
+                deleteDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //delete the workout
+                        WorkoutManager.getInstance().removeWorkout(workoutSelected);
+                        workoutOptionsList.remove(workoutSelected);
+                        workoutOptionsAdapter.notifyDataSetChanged();
+                    }
+                });
+                deleteDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                deleteDialog.show();
+                return true;
             }
         });
 

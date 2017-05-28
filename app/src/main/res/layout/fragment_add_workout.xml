@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="projects.austin.gymrat.NewWorkoutFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ly_scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/txt_form_WorkoutName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Workout Name"
+                android:inputType="textPersonName"
+                android:textSize="36sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_form_Exercises"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Exercises"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/btn_form_AddExercise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:text="Add Exercise" />
+            </RelativeLayout>
+
+            <ListView
+                android:id="@+id/lv_form_Exercises"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_margin="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_form_Tags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tags"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/btn_form_AddTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:text="Add Tag" />
+            </RelativeLayout>
+
+            <ListView
+                android:id="@+id/lv_form_Tags"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="10dp" />
+
+            <Button
+                android:id="@+id/btn_form_Confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create Workout" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

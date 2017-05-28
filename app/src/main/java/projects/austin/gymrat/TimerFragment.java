@@ -1,42 +1,38 @@
 package projects.austin.gymrat;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import projects.austin.gymrat.adapters.WorkoutDisplayAdapter;
-import projects.austin.gymrat.model.Workout.Workout;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link WorkoutDisplayFragment.OnFragmentInteractionListener} interface
+ * {@link TimerFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WorkoutDisplayFragment#newInstance} factory method to
+ * Use the {@link TimerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkoutDisplayFragment extends Fragment {
+public class TimerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_WORKOUT_NAME = "workoutName";
-    private String workoutName;
-    private boolean onClickToggle;
+    private static final String ARG_SECONDS = "RestIntervalSeconds";
+
+    // TODO: Rename and change types of parameters
+    private int restInterval;
+    private MediaPlayer mediaPlayer;
+
     private OnFragmentInteractionListener mListener;
 
-    public WorkoutDisplayFragment() {
+    public TimerFragment() {
         // Required empty public constructor
     }
 
@@ -44,14 +40,14 @@ public class WorkoutDisplayFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param workoutName The name of the workout
-     * @return A new instance of fragment WorkoutDisplayFragment.
+     * @param seconds the number of seconds between sets
+     * @return A new instance of fragment TimerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WorkoutDisplayFragment newInstance(String workoutName) {
-        WorkoutDisplayFragment fragment = new WorkoutDisplayFragment();
+    public static TimerFragment newInstance(int seconds) {
+        TimerFragment fragment = new TimerFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_WORKOUT_NAME, workoutName);
+        args.putInt(ARG_SECONDS, seconds);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +56,7 @@ public class WorkoutDisplayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            workoutName = getArguments().getString(ARG_WORKOUT_NAME);
+            restInterval = getArguments().getInt(ARG_SECONDS);
         }
     }
 
@@ -68,38 +64,46 @@ public class WorkoutDisplayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myView =  inflater.inflate(R.layout.fragment_workout_display, container, false);
+        View resultView = inflater.inflate(R.layout.fragment_timer, container, false);
+        final TextView timerDisplay = (TextView) resultView.findViewById(R.id.lbl_timerDisplay);
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm_sound);
+        Button resetButton = (Button) resultView.findViewById(R.id.btn_resetTimer);
+        final CountDownTimer myTimer = new CountDownTimer(restInterval * 1000 + 100, 1000) {
+            @Override
+            public void onTick(long l) {
+                int secondsLeft = (int) l / 1000;
+                System.out.println("Seconds Left: " + secondsLeft);
+                int minutes = secondsLeft / 60;
+                int seconds = secondsLeft - minutes * 60;
+                if (seconds == 0) {
+                    String text = minutes + " : 00";
+                    timerDisplay.setText(text);
+                } else if (seconds < 10){
+                    String text = minutes + " : 0" + seconds;
+                    timerDisplay.setText(text);
+                }else {
+                        timerDisplay.setText(minutes + " : " + seconds);
+                    }
+            }
 
-        //setup the button
-        Button startWorkout = (Button) myView.findViewById(R.id.btn_startWorkout);
-        startWorkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onFinish() {
+                timerDisplay.setText("0:00");
+                mediaPlayer.start();
+            }
+        }.start();
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.addToBackStack(null);
-                ft.replace(R.id.fragment_layout_container, WorkoutInstanceFragment.newInstance(workoutName));
-                ft.commit();
+                mediaPlayer.stop();
+                myTimer.cancel();
+                myTimer.start();
             }
         });
+        return resultView;
 
-        //get the workout
-        Workout myWorkout = WorkoutManager.getInstance().getWorkout(workoutName);
-
-        //get the views
-        TextView workoutName = (TextView) myView.findViewById(R.id.lbl_workoutName);
-        ListView exerciseList = (ListView) myView.findViewById(R.id.lv_exercises);
-
-        //populate the views
-        workoutName.setText(myWorkout.getName());
-        ArrayAdapter<WorkoutInstanceExercise> workoutExerciseAdapter = new WorkoutDisplayAdapter(getContext(),
-                R.layout.workout_display_item_row, myWorkout.getExerciseList());
-        exerciseList.setAdapter(workoutExerciseAdapter);
-
-
-        return myView;
     }
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -122,6 +126,7 @@ public class WorkoutDisplayFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        mediaPlayer.stop();
         mListener = null;
     }
 

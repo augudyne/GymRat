@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,6 +33,24 @@ public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutInstanceExercise>
     public WorkoutDisplayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<WorkoutInstanceExercise> objects) {
         super(context, resource, objects);
         exerciseList = objects;
+    }
+
+    public WorkoutDisplayAdapter(@NonNull Context context, @LayoutRes int resource) {
+        super(context, resource);
+        exerciseList = new ArrayList<>();
+    }
+
+    @Override
+    public void add(@Nullable WorkoutInstanceExercise object) {
+        super.add(object);
+        exerciseList.add(object);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void remove(@Nullable WorkoutInstanceExercise object) {
+        super.remove(object);
+        exerciseList.remove(object);
     }
 
     @NonNull

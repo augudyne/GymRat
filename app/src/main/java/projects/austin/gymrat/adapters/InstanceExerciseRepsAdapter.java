@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -49,7 +50,6 @@ public class InstanceExerciseRepsAdapter extends RecyclerView.Adapter<InstanceEx
         this.thisExercise = thisExercise;
         this.listOfReps = this.thisExercise.getListOfReps();
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         EditText repInput = makeRepsEditText("0", parent.getContext());
@@ -94,10 +94,16 @@ public class InstanceExerciseRepsAdapter extends RecyclerView.Adapter<InstanceEx
         notifyDataSetChanged();
     }
 
+    public void removeSet(Context ctx){
+        this.thisExercise.removeSet();
+        notifyDataSetChanged();
+    }
+
 
     private EditText makeRepsEditText(String textToDisplay, Context ctx){
         EditText result = new EditText(ctx);
         result.setText(textToDisplay);
+        result.setInputType(InputType.TYPE_CLASS_NUMBER);
         result.setFilters(myInputFilters);
         result.setTextSize(30);
         result.setOnTouchListener(new View.OnTouchListener() {

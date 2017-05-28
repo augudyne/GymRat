@@ -2,7 +2,11 @@ package projects.austin.gymrat.model.Workout;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import projects.austin.gymrat.model.Logs.WorkoutInstance;
+import projects.austin.gymrat.model.exceptions.InvalidManagerModeException;
+
 /**
  * Created by Austin on 2017-05-11.
  *
@@ -16,7 +20,9 @@ public class WorkoutInstanceManager {
     private static final String TAG = "WorkoutInstanceManager";
     public static WorkoutInstanceManager myManager;
     private static WorkoutInstance workoutInstance;
-    public WorkoutInstanceManager() {
+    private static boolean editMode;
+    private static boolean isAttached; //true if there is an instance currently attached
+    public WorkoutInstanceManager(){
     }
 
     public static WorkoutInstanceManager getInstance(){
@@ -29,6 +35,7 @@ public class WorkoutInstanceManager {
     public void setCurrentWorkoutInstance(Workout workoutToInstantiate){
         workoutInstance = new WorkoutInstance(workoutToInstantiate);
     }
+
 
     public WorkoutInstance getCurrentWorkoutInstance(){
         return workoutInstance;

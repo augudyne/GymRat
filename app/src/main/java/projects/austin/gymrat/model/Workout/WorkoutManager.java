@@ -28,6 +28,10 @@ public class WorkoutManager implements Iterable<Workout>{
     }
 
     public void addWorkout(Workout workout) {
+        System.out.println("Adding: " + workout.toString());
+        for(WorkoutInstanceExercise e : workout.getExerciseList()){
+            System.out.println(e.toString());
+        }
         workoutCollection.put(workout.getName(), workout);
     }
 
