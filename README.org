@@ -1,6 +1,15 @@
 * GymRat
   A simple workout logging application
 ** Commits
+*** May 27th 2017
+    - Refactored project as GymRat (changed graphics accordingly)
+    - Added NewWorkoutFragment, allowing user to create and add new workout
+      - Requires a workout name, and at least 1 exercise
+      - Exercise creation done by AlertDialog with immediate show override to maintain window if form not complete
+      - Exercise reps addition by (finally) a reasonably elegant solution, using ViewHolder tag and getLayoutPosition
+    - Added long-click menu for workout selection, replacing spinner with ListView
+    - Timer toggle allows user to switch in between viewing exercises, and a rest timer with reset button fragment.
+
 *** May 12th 2017
     Replaced clunky addSet feature by adding a WorkoutInstanceManager
     - WorkoutInstanceManager :: Essentially a cached version of the current WorkoutInstance. Allows modification for database IO, and retaining context on fragment navigation
