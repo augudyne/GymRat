@@ -5,6 +5,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -13,9 +14,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import projects.austin.gymrat.model.Logs.WorkoutInstance;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
 import projects.austin.gymrat.model.Logs.WorkoutLogManager;
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
+import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
+import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
+import projects.austin.gymrat.model.Workout.Workout;
 
 /**
  * Created by Austin on 2017-05-05.
@@ -102,19 +114,7 @@ public class WorkoutLogIO {
             }
             JSONArray arrayOfWorkoutInstances = new JSONArray(sb.toString());
 
-
-            WorkoutLogManager workoutLogManager = WorkoutLogManager.getInstance();
-            for(int i = 0; i < arrayOfWorkoutInstances.length(); i++) {
-                String jsonAsString = arrayOfWorkoutInstances.getString(i);
-                WorkoutInstance workoutInstance = WorkoutInstance.newInstance(jsonAsString);
-                if (workoutInstance != null) {
-                    workoutLogManager.addWorkoutInstance(workoutInstance);
-                    Log.d(TAG, workoutInstance.toJSONObject().toString());
-                } else {
-                    Log.e(TAG, "Invalid JSON File...leaving manager unpopulated");
-                    return;
-                }
-            }
+            populateWorkoutLogManager(arrayOfWorkoutInstances);
 
         } catch (FileNotFoundException fnf) {
             fnf.printStackTrace();
@@ -127,5 +127,69 @@ public class WorkoutLogIO {
             Log.d(TAG, "Unable to make JSON from String");
         }
     }
+
+
+    private void populateWorkoutLogManager(JSONArray array) throws JSONException{
+
+        WorkoutLogManager workoutLogManager = WorkoutLogManager.getInstance();
+
+        for(int i = 0; i < array.length(); i++) {
+            JSONObject jsonLogInstance = array.getJSONObject(i);
+            Date instanceDate;
+            try {
+                instanceDate = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA).parse(jsonLogInstance.getString("Date"));
+            }catch (ParseException pe){
+                pe.printStackTrace();
+                instanceDate = new Date(System.currentTimeMillis());
+            }
+            JSONObject workoutObject = jsonLogInstance.getJSONObject("WorkoutInstance");
+            String workoutName = workoutObject.getString("Name");
+            JSONArray exerciseArray = workoutObject.getJSONArray("ExerciseList");
+            List<WorkoutInstanceExercise> instanceExerciseList = new ArrayList<>();
+            ExerciseManager manager = ExerciseManager.getInstance();
+            for(int j = 0; j < exerciseArray.length(); j++) {
+                //parsing workout instance exercise
+                JSONObject anExercise = exerciseArray.getJSONObject(j);
+                String name = anExercise.getString("Name");
+                Exercise parentExercise = manager.getExercise(name);
+                String description = parentExercise.getDescription();
+                ExerciseType type = parentExercise.getExerciseType();
+                JSONArray repsArray = anExercise.getJSONArray("Reps");
+
+                List<Integer> listOfReps = new ArrayList<>();
+                for (int k = 0; k < repsArray.length(); k++) {
+                    listOfReps.add(repsArray.getInt(k));
+                }
+                int restInterval = 0;
+                try {
+                    restInterval = anExercise.getInt("Rest");
+                } catch (JSONException jse) {
+                    //unable to find the rest
+                    jse.printStackTrace();
+
+                }
+                instanceExerciseList.add(new WorkoutInstanceExercise(name, description, type, listOfReps, restInterval));
+            }
+
+            List<String> tags = new ArrayList<>();
+            try{
+                JSONArray tagsArray = workoutObject.getJSONArray("Tags");
+                for(int j = 0; j < tagsArray.length(); j++){
+                    String aTag = tagsArray.getString(j);
+                }
+            } catch (JSONException jse){
+                //just continue
+                jse.printStackTrace();
+            }
+
+            WorkoutInstance myInstance = new WorkoutInstance(workoutName, instanceExerciseList, tags);
+
+            workoutLogManager.addWorkoutInstance(myInstance);
+            Log.d(TAG, myInstance.toJSONObject().toString());
+
+        }
+
+    }
+
 
 }

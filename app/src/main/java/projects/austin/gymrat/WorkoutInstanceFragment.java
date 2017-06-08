@@ -1,11 +1,9 @@
 package projects.austin.gymrat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +14,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import projects.austin.gymrat.adapters.WorkoutInstanceDisplayAdapter;
 import projects.austin.gymrat.model.Logs.WorkoutInstance;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceManager;
 import projects.austin.gymrat.model.Logs.WorkoutLogManager;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceManager;
 import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.providers.WorkoutLogIO;
 
 
 /**
@@ -87,8 +81,9 @@ public class WorkoutInstanceFragment extends Fragment {
         View myView = inflater.inflate(R.layout.fragment_workout_instance_fragment_layout, container, false);
         WorkoutInstanceDisplayAdapter listViewAdapter = new WorkoutInstanceDisplayAdapter(getContext(),
                 R.layout.fragment_workout_instance_row_layout,
-                WorkoutManager.getInstance().getWorkout(workoutName).getExerciseList()
-                );
+                currentWorkoutInstance.getInstanceExerciseList()
+        );
+
         ListView myListView = (ListView) myView.findViewById(R.id.lv_workoutInstance);
 
         myListView.setAdapter(listViewAdapter);
@@ -118,7 +113,10 @@ public class WorkoutInstanceFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 WorkoutInstance workoutToSave = WorkoutInstanceManager.getInstance().getCurrentWorkoutInstance();
+                WorkoutLogManager.getInstance().addWorkoutInstance(workoutToSave);
+
                 Log.d(TAG_FRAGMENT, workoutToSave.toJSONObject().toString());
+                WorkoutLogIO.getInstance().writeLogsToFile(getContext());
                 Toast.makeText(getContext(), "Saved workout instance " + workoutName, Toast.LENGTH_SHORT).show();
             }
         });

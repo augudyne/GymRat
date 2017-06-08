@@ -6,17 +6,17 @@
       "ExerciseList":[
         {
           "Name":"Bench Press",
-          "Description":"Description for bench press",
-          "ExerciseType": "BARBELL",
           "Reps":[
             12,
             10,
             8,
             8,
             5
-          ]
+          ],
+          "Rest": 60
         }
-      ]
+      ],
+      "Tags": ["Chest"]
     }
   }
 ]

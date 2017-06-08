@@ -15,14 +15,15 @@ import java.util.List;
 import java.util.Locale;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
 
 /**
  * Created by Austin on 2017-05-02.
  */
 
-public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutInstanceExercise>{
-    private List<WorkoutInstanceExercise> exerciseList;
+public class WorkoutDisplayAdapter extends ArrayAdapter<Exercise>{
+    private List<Exercise> exerciseList;
 
     private class ExerciseHolder{
         TextView title;
@@ -30,7 +31,7 @@ public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutInstanceExercise>
         TextView displayExtraNumberInfo;
     }
 
-    public WorkoutDisplayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<WorkoutInstanceExercise> objects) {
+    public WorkoutDisplayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Exercise> objects) {
         super(context, resource, objects);
         exerciseList = objects;
     }
@@ -41,14 +42,14 @@ public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutInstanceExercise>
     }
 
     @Override
-    public void add(@Nullable WorkoutInstanceExercise object) {
+    public void add(@Nullable Exercise object) {
         super.add(object);
         exerciseList.add(object);
         notifyDataSetChanged();
     }
 
     @Override
-    public void remove(@Nullable WorkoutInstanceExercise object) {
+    public void remove(@Nullable Exercise object) {
         super.remove(object);
         exerciseList.remove(object);
     }
@@ -66,40 +67,15 @@ public class WorkoutDisplayAdapter extends ArrayAdapter<WorkoutInstanceExercise>
             exerciseHolder = new ExerciseHolder();
             exerciseHolder.title = (TextView) result.findViewById(R.id.lbl_exName);
             exerciseHolder.description = (TextView) result.findViewById(R.id.lbl_exDesc);
-            exerciseHolder.displayExtraNumberInfo = (TextView) result.findViewById(R.id.lbl_exExtra);
             result.setTag(exerciseHolder);
         } else {
             exerciseHolder = (ExerciseHolder) result.getTag();
         }
 
         //now set the the values knowing we have all views in our holder
-        WorkoutInstanceExercise myExercise = exerciseList.get(position);
+        Exercise myExercise = exerciseList.get(position);
         exerciseHolder.title.setText(myExercise.getName());
         exerciseHolder.description.setText(myExercise.getDescription());
-        exerciseHolder.displayExtraNumberInfo.setText(String.format(Locale.CANADA, "%d", myExercise.getNumberOfSets()));
-        exerciseHolder.displayExtraNumberInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView textView = (TextView) view;
-                msgObject msgObject = (msgObject) view.getTag();
-                String[] viewTexts = msgObject.getTxtToDisplay();
-                if(msgObject.isDisplaySets()){
-                    textView.setText(viewTexts[0]);
-                } else {
-                    textView.setText(viewTexts[1]);
-                }
-                //alter the state on the tag
-                msgObject.toggleDisplayText();
-            }
-        });
-
-        //build the extraText info onClickListener
-        String[] txtViewText= {String.format(Locale.CANADA, "%d", myExercise.getNumberOfSets()),
-                String.format(Locale.CANADA, "%s", myExercise.getListOfReps().toString())};
-        msgObject myMsg = new msgObject(false, txtViewText);
-
-
-        exerciseHolder.displayExtraNumberInfo.setTag(myMsg);
 
         return result;
 

@@ -29,8 +29,8 @@ import java.util.List;
 import projects.austin.gymrat.adapters.NewExerciseRepsAdapter;
 import projects.austin.gymrat.adapters.WorkoutDisplayAdapter;
 import projects.austin.gymrat.model.Logs.WorkoutInstance;
-import projects.austin.gymrat.model.Workout.ExerciseType;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
 import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 

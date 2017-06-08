@@ -2,46 +2,31 @@
   {
     "Name": "Default Chest",
     "Tags": ["chest"],
-    "Exercises": [
-      {"Name": "Bench Press", "Description": "Description for bench press", "Type": "BARBELL","Sets":[12,10,8,8]}
-    ]
+    "Exercises": ["Bench Press", "Incline Press", "Incline Fly"]
   },
   {
     "Name": "Default Chest2",
     "Tags": ["chest"],
-    "Exercises": [
-
-      {"Name": "Incline Press", "Description": "Description for incline press", "Type": "BARBELL", "Sets": [12,12,12,12], "Rest": 90},
-      {"Name": "Bench Press", "Description": "Description for bench press", "Type": "BARBELL","Sets":[12,10,8,8], "Rest": 15}
-
-    ]
+    "Exercises": ["Incline Press"]
   },
   {
     "Name": "Default Back",
     "Tags": ["back"],
-    "Exercises": [
-      {"Name": "Back Row", "Description": "Description for back row", "Type": "DUMBBELL", "Sets":[12,12,12,12]}
-    ]
+    "Exercises": ["Back Row"]
   },
   {
     "Name": "Default Leg",
     "Tags": ["leg"],
-    "Exercises": [
-      {"Name": "Back Squat", "Description":"Description for back squat", "Type": "BARBELL", "Sets":[10,10,10,10]}
-    ]
+    "Exercises": ["Back Squat"]
   },
   {
     "Name": "Default Shoulder",
     "Tags": ["shoulder"],
-    "Exercises": [
-      {"Name": "Military Press", "Description": "Description for military press", "Type": "DUMBBELL", "Sets": [10,10,10]}
-    ]
+    "Exercises": [ "Military Press" ]
   },
   {
     "Name": "Default Cardio",
     "Tags": ["cardio"],
-    "Exercises": [
-      {"Name": "Run", "Description": "Description for run", "Type": "CARDIO_FREE", "Sets": [10,10,10,10]}
-    ]
+    "Exercises": ["Run"]
   }
 ]}

@@ -17,6 +17,7 @@ import org.json.JSONArray;
 
 import projects.austin.gymrat.model.Logs.WorkoutLogManager;
 import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.providers.ExerciseIO;
 import projects.austin.gymrat.providers.WorkoutLogIO;
 import projects.austin.gymrat.providers.WorkoutsIO;
 
@@ -66,11 +67,13 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+        //populate our exercises
+        ExerciseIO.getInstance().loadExercisesFromDisk(this);
+
         //populate our workouts
-        if(WorkoutsIO.getInstance().getJSONAndLoad(this, true)){
-            //todo: reset this flag to false
+        if(WorkoutsIO.getInstance().getJSONAndLoad(this, false)){
             System.out.println(WorkoutManager.getInstance().toString());
-        };
+        }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fragment_layout_container, new TemporaryLandingFragment());

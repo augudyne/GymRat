@@ -16,9 +16,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.ExerciseType;
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
+import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
+import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
 import projects.austin.gymrat.model.Workout.Workout;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
 import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 /**
@@ -44,7 +46,7 @@ public class WorkoutsIO {
 
 
     /**
-     * Loaidng the JSON of Workouts stored on disk.
+     * Loading the JSON of Workouts stored on disk.
      * @param myContext the context of the request for IO (to access the file)
      * @return the JSONObject on disk or the default workouts from raw assets
      */
@@ -93,27 +95,11 @@ public class WorkoutsIO {
 
                 //get the exercises in the workout
                 JSONArray woExercises = workoutObject.getJSONArray("Exercises");
-                ArrayList<WorkoutInstanceExercise> bufferList = new ArrayList<>();
+                ArrayList<Exercise> bufferList = new ArrayList<>();
                 for(int j = 0; j < woExercises.length(); j++) {
                     //parse an exercise, has a name, description, type, number of sets, and a list of the sets
-                    JSONObject exerciseObject = woExercises.getJSONObject(j);
-                    String name = exerciseObject.getString("Name");
-                    String description = exerciseObject.getString("Description");
-                    ExerciseType type = ExerciseType.getTypeFromString(exerciseObject.getString("Type"));
-
-                    //get the sets
-                    JSONArray exerciseSets = exerciseObject.getJSONArray("Sets");
-                    ArrayList<Integer> listOfReps = new ArrayList<>();
-                    for(int k = 0; k < exerciseSets.length();k++){
-                        listOfReps.add(exerciseSets.getInt(k));
-                    }
-                    int rest;
-                    try {
-                         rest = exerciseObject.getInt("Rest");
-                    } catch (JSONException jse){
-                        rest = 0;
-                    }
-                    bufferList.add(new WorkoutInstanceExercise(name, description, type , listOfReps, rest));
+                    String exerciseName = woExercises.getString(j);
+                    bufferList.add(ExerciseManager.getInstance().getExercise(exerciseName));
                 }
 
                 //add the workout to the manager

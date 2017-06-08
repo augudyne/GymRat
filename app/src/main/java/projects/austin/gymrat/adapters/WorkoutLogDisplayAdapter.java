@@ -52,7 +52,7 @@ public class WorkoutLogDisplayAdapter extends ArrayAdapter<WorkoutInstance> {
         //set the information
         WorkoutInstance workoutInstance = listOfWorkoutInstances.get(position);
         workoutInstanceHolder.titleDisplay.setText(workoutInstance.getName());
-        workoutInstanceHolder.dateDisplay.setText(workoutInstance.getDate());
+        workoutInstanceHolder.dateDisplay.setText(workoutInstance.getDate().toString());
         return convertView;
     }
 

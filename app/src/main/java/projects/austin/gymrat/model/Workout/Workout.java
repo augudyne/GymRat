@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
+import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
+
 /**
  * Created by Austin on 2017-05-02.
  * A workout consists of an arbitrary number of Exercises
@@ -17,7 +21,7 @@ import java.util.Map;
 
 public class Workout {
     protected String name;
-    protected Map<String, WorkoutInstanceExercise> exerciseDictionary;
+    protected Map<String, Exercise> exercises;
     protected List<String> tags;
 
 
@@ -25,23 +29,23 @@ public class Workout {
         return name;
     }
 
-    public List<WorkoutInstanceExercise> getExerciseList() {
-        return Collections.unmodifiableList(new ArrayList<WorkoutInstanceExercise>(exerciseDictionary.values()));
+    public List<Exercise> getExerciseList() {
+        return Collections.unmodifiableList(new ArrayList<Exercise>(exercises.values()));
     }
 
-    public Map<String, WorkoutInstanceExercise> getExerciseDictionary() {
-        return exerciseDictionary;
+    public Map<String, Exercise> getExercises() {
+        return Collections.unmodifiableMap(exercises);
     }
 
     public List<String> getTags() {
         return tags;
     }
 
-    public Workout(String name, List<WorkoutInstanceExercise> exerciseList, List<String> tags) {
+    public Workout(String name, List<Exercise> exerciseList, List<String> tags) {
         this.name = name;
-        this.exerciseDictionary = new HashMap<>();
-        for (WorkoutInstanceExercise we : exerciseList) {
-            this.exerciseDictionary.put(we.getName(), we);
+        this.exercises = new HashMap<>();
+        for (Exercise w : exerciseList) {
+            this.exercises.put(w.getName(), w);
         }
         this.tags = tags;
     }
@@ -53,18 +57,18 @@ public class Workout {
     }
 
     public void addExercise(WorkoutInstanceExercise exercise){
-        this.exerciseDictionary.put(exercise.getName(), exercise);
+        this.exercises.put(exercise.getName(), exercise);
     }
 
     public void removeExercise(WorkoutInstanceExercise exercise) {
-        if(this.exerciseDictionary.containsKey(exercise.getName())){
-            this.exerciseDictionary.remove(exercise.getName());
+        if(this.exercises.containsKey(exercise.getName())){
+            this.exercises.remove(exercise.getName());
         }
     }
 
     public void removeExercise(Exercise exercise){
-        if(this.exerciseDictionary.containsKey(exercise.getName())){
-            this.exerciseDictionary.remove(exercise.getName());
+        if(this.exercises.containsKey(exercise.getName())){
+            this.exercises.remove(exercise.getName());
         }
     }
 
@@ -79,15 +83,12 @@ public class Workout {
             //get the name
             String nameBuffer = getNameFromJSON(myWorkoutObject);
             //get the list of exercises
-            List<WorkoutInstanceExercise> listOfExercises = getWorkoutExercisesFromJSON(myWorkoutObject);
+            this.exercises = getWorkoutExercisesFromJSON(myWorkoutObject);
             //get the list of tags
             List<String> listOfTags = getTagsFromJSON(myWorkoutObject);
 
             this.name = nameBuffer;
-            this.exerciseDictionary = new HashMap<>();
-            for (WorkoutInstanceExercise we : listOfExercises) {
-                this.exerciseDictionary.put(we.getName(), we);
-            }
+            this.exercises = new HashMap<>();
             this.tags = listOfTags;
         } catch (JSONException ex) {
             ex.printStackTrace();
@@ -100,8 +101,8 @@ public class Workout {
         try {
             myJSONObject.put("Name", name);
             JSONArray jsonArray = new JSONArray();
-            for (WorkoutInstanceExercise we : exerciseDictionary.values()) {
-                jsonArray.put(we.toJSONObject());
+            for (String exerciseName : exercises.keySet()) {
+                jsonArray.put(exerciseName);
             }
             myJSONObject.put("ExerciseList", jsonArray);
             return myJSONObject;
@@ -123,16 +124,17 @@ public class Workout {
         return result;
     }
 
-    protected static List<WorkoutInstanceExercise> getWorkoutExercisesFromJSON(JSONObject jsonObject) throws JSONException {
+    protected static Map<String,Exercise> getWorkoutExercisesFromJSON(JSONObject jsonObject) throws JSONException {
         JSONArray arrayOfExercises = jsonObject.getJSONArray("ExerciseList");
-        List<WorkoutInstanceExercise> listOfExercises = new ArrayList<>();
+        Map<String,Exercise> listOfExercises = new HashMap<>();
         for(int i = 0; i < arrayOfExercises.length(); i++) {
-            String myExerciseAsString = arrayOfExercises.getString(i);
-            WorkoutInstanceExercise exerciseInstance = WorkoutInstanceExercise.getWorkoutInstanceExerciseFromJSONString(myExerciseAsString);
-            listOfExercises.add(exerciseInstance);
+            String myExerciseAsString = arrayOfExercises.getString(i).toLowerCase();
+            Exercise exerciseInstance = ExerciseManager.getInstance().getExercise(myExerciseAsString);
+            listOfExercises.put(myExerciseAsString, exerciseInstance);
         }
         return listOfExercises;
     }
+
     protected static List<String> getTagsFromJSON(JSONObject jsonObject) throws JSONException {
         JSONArray arrayOfTags = new JSONArray(jsonObject.getJSONArray("Tags"));
         List<String> listOfTags = new ArrayList<>();

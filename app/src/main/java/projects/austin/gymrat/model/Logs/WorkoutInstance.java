@@ -2,17 +2,21 @@ package projects.austin.gymrat.model.Logs;
 
 import android.content.Context;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
 import projects.austin.gymrat.model.Workout.Workout;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
 import projects.austin.gymrat.model.exceptions.ExerciseNotFoundException;
 import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
 
@@ -23,7 +27,8 @@ import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
 
 
 public class WorkoutInstance extends Workout {
-    private String date;
+    private Date date;
+    private Map<String,WorkoutInstanceExercise> exercises;
 
     /**
      * Constructor for WorkoutInstance, for when the Date is recorded as current time
@@ -32,20 +37,33 @@ public class WorkoutInstance extends Workout {
      * @param tags the tags associated with this workout
      */
     public WorkoutInstance(String name, List<WorkoutInstanceExercise> exerciseList, List<String> tags) {
-        super(name, exerciseList, tags);
-        this.date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA).format(new Date(System.currentTimeMillis()));
+        this(new Date(System.currentTimeMillis()),
+                name, exerciseList, tags);
     }
 
     /**
+     * Create a workout instance from a given workout
+     *
      * Make a copy of the workout, and then set the date
      * @param workoutSuper the workout to create the instance from
 
      */
     public WorkoutInstance(Workout workoutSuper){
         super.name = workoutSuper.getName();
-        super.exerciseDictionary = workoutSuper.getExerciseDictionary();
-        super.tags = workoutSuper.getTags();
-        this.date = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA).format(new Date(System.currentTimeMillis()));
+        super.exercises = new HashMap<>(workoutSuper.getExercises());
+        super.tags = new ArrayList<>(workoutSuper.getTags());
+        this.exercises = new HashMap<>();
+        for(Exercise e : super.exercises.values()){
+            WorkoutInstanceExercise buffer = new WorkoutInstanceExercise(
+                    e.getName(),
+                    e.getDescription(),
+                    e.getExerciseType(),
+                    new ArrayList<Integer>(),
+                    0
+            );
+            exercises.put(e.getName(), buffer);
+        }
+        this.date = (new Date(System.currentTimeMillis()));
 
     }
 
@@ -54,41 +72,25 @@ public class WorkoutInstance extends Workout {
      * Constructor for WorkoutInstance, for when the Date is provided by the record (DatabaseIO)
      * @param date the Date on which the WorkoutInstance occurred
      * @param name the name of the workout
-     * @param exerciseList the list of execises for this workout
+     * @param exerciseList the list of exercises for this workout
      * @param tags the tags associated with this workout
      */
-    private WorkoutInstance(String date, String name, List<WorkoutInstanceExercise> exerciseList, List<String> tags) {
-        super(name, exerciseList, tags);
+    private WorkoutInstance(Date date, String name, List<WorkoutInstanceExercise> exerciseList, List<String> tags) {
+        super();
+        super.name = name;
+        super.tags = tags;
+        this.exercises = new HashMap<>();
+        for(WorkoutInstanceExercise wie : exerciseList){
+            this.exercises.put(wie.getName(), wie);
+        }
         this.date = date;
     }
 
-    /**
-     * Factory design pattern for creating a WorkoutInstance from String input - required for input scrubbing
-     * @param instanceAsJSONString the JSONString of the WorkoutInstance from DatabaseIO
-     * @return a new instance of WorkoutInstance made from given String or null if invalid input
-     */
-    public static WorkoutInstance newInstance(String instanceAsJSONString){
-        //factory design pattern in order to accommodate input cleaning
-        try {
-            JSONObject myWorkoutObject = new JSONObject(instanceAsJSONString);
-            //get the date
-            String date = myWorkoutObject.getString("Date");
-            String name = getNameFromJSON(myWorkoutObject);
-            List<WorkoutInstanceExercise> listOfExercises = getWorkoutExercisesFromJSON(myWorkoutObject);
-            if(listOfExercises == null){
-                return null;
-                //parent should handle this
-            }
-            List<String> listOfTags = getTagsFromJSON(myWorkoutObject);
-            return new WorkoutInstance(date, name, listOfExercises, listOfTags);
-        } catch (JSONException jse) {
-            jse.printStackTrace();
-            System.out.println("Unable to create the object");
-            return null;
-        }
+    public List<WorkoutInstanceExercise> getInstanceExerciseList() {
+        return new ArrayList<>(exercises.values());
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -101,7 +103,7 @@ public class WorkoutInstance extends Workout {
      */
     public boolean modifyReps(String exerciseKey, int index, int newValue) throws ExerciseNotFoundException {
         try {
-            exerciseDictionary.get(exerciseKey).changeRepNumber(index, newValue);
+            exercises.get(exerciseKey).changeRepNumber(index, newValue);
             return true;
         } catch (InvalidRepIndexException ire){
             //thrown when trying to change rep number, but rep index does not exist
@@ -114,17 +116,33 @@ public class WorkoutInstance extends Workout {
     }
 
     public int addSet(String exerciseKey, int index, int newValue) {
-        exerciseDictionary.get(exerciseKey).addSet();
-        return exerciseDictionary.get(exerciseKey).getNumberOfSets();
+        exercises.get(exerciseKey).addSet();
+        return exercises.get(exerciseKey).getNumberOfSets();
     }
 
-    public JSONObject toJSONObject(Context cxt){
+    @Override
+    public JSONObject toJSONObject(){
         JSONObject workoutInstanceAsJSON = new JSONObject();
         try {
 
-            DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(cxt);
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.CANADA);
+            System.out.println("Date is: " + date);
             workoutInstanceAsJSON.put("Date", dateFormat.format(date));
-            workoutInstanceAsJSON.put("Workout", super.toJSONObject());
+            //build the workoutInstance json
+            JSONObject myselfAsJSONObject = new JSONObject();
+            try {
+                myselfAsJSONObject.put("Name", name);
+                JSONArray jsonArray = new JSONArray();
+                for (WorkoutInstanceExercise e : exercises.values()) {
+                    //an exercise has a name, its sets, AND its rest Interval
+                    jsonArray.put(e.toJSONObject());
+                }
+                myselfAsJSONObject.put("ExerciseList", jsonArray);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             return workoutInstanceAsJSON;
             // date = dateFormat.parse(); to retrieve
         } catch (JSONException e) {

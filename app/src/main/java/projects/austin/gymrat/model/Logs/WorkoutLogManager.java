@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.TreeMap;
 
 public class WorkoutLogManager implements Iterable<WorkoutInstance>{
     private static WorkoutLogManager instance;
-    private Map<String, WorkoutInstance> listOfWorkouts;
+    private Map<Date, WorkoutInstance> listOfWorkouts;
 
     public static WorkoutLogManager getInstance(){
         if(instance == null){
@@ -47,7 +48,7 @@ public class WorkoutLogManager implements Iterable<WorkoutInstance>{
 
     public JSONArray toJSONArray(){
         JSONArray result = new JSONArray();
-        for (Map.Entry<String, WorkoutInstance> entry : listOfWorkouts.entrySet()) {
+        for (Map.Entry<Date, WorkoutInstance> entry : listOfWorkouts.entrySet()) {
             JSONObject buffer = new JSONObject();
             try {
                 buffer.put("Date", entry.getKey());

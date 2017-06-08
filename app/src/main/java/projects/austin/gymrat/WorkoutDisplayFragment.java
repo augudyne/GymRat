@@ -12,11 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import projects.austin.gymrat.adapters.WorkoutDisplayAdapter;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceManager;
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
 import projects.austin.gymrat.model.Workout.Workout;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+
 import projects.austin.gymrat.model.Workout.WorkoutManager;
 
 
@@ -91,7 +92,7 @@ public class WorkoutDisplayFragment extends Fragment {
 
         //populate the views
         workoutName.setText(myWorkout.getName());
-        ArrayAdapter<WorkoutInstanceExercise> workoutExerciseAdapter = new WorkoutDisplayAdapter(getContext(),
+        ArrayAdapter<Exercise> workoutExerciseAdapter = new WorkoutDisplayAdapter(getContext(),
                 R.layout.workout_display_item_row, myWorkout.getExerciseList());
         exerciseList.setAdapter(workoutExerciseAdapter);
 

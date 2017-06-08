@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import projects.austin.gymrat.model.Workout.Exercise.Exercise;
+
 /**
  * Created by Austin on 2017-05-02.
  */
@@ -29,7 +31,7 @@ public class WorkoutManager implements Iterable<Workout>{
 
     public void addWorkout(Workout workout) {
         System.out.println("Adding: " + workout.toString());
-        for(WorkoutInstanceExercise e : workout.getExerciseList()){
+        for(Exercise e : workout.getExerciseList()){
             System.out.println(e.toString());
         }
         workoutCollection.put(workout.getName(), workout);

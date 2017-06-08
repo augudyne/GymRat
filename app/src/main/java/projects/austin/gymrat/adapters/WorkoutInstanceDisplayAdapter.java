@@ -12,13 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
 
 /**
  * Created by Austin on 2017-05-05.
@@ -40,7 +39,7 @@ public class WorkoutInstanceDisplayAdapter extends ArrayAdapter<WorkoutInstanceE
             myResultView = lyInflater.inflate(R.layout.fragment_workout_instance_row_layout, parent, false);
             myWorkoutInfoHolder = new WorkoutExerciseHolder();
             myWorkoutInfoHolder.workoutExerciseName = (TextView) myResultView.findViewById(R.id.lbl_exerciseTitle);
-            myWorkoutInfoHolder.workoutExerciseDesc = (TextView) myResultView.findViewById((R.id.lbl_exerciseTitle));
+            myWorkoutInfoHolder.workoutExerciseDesc = (TextView) myResultView.findViewById((R.id.lbl_exerciseDescription));
             myWorkoutInfoHolder.rv_repsDisplay = (RecyclerView) myResultView.findViewById(R.id.rv_instanceRowRecyclerView);
             myWorkoutInfoHolder.btn_addSet = (Button) myResultView.findViewById(R.id.btn_addSet);
             myWorkoutInfoHolder.btn_removeSet = (Button) myResultView.findViewById(R.id.btn_removeSet);
