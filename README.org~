@@ -1,6 +1,10 @@
 * GymRat
   A simple workout logging application
 ** Commits
+*** June 12th 2017
+    - Add exerciseName input suggestions via AutoCompleteTextView
+    - Selecting an exercise will update the remaining available information in the exercise prompt
+**** TODO Implement a paired entry of reps with weight input
 *** June 7th 2017
     - Added an exercise manager, and IO (only input is done, need to complete save to disk feature)
     - Reconfigured Workout and WorkoutInstance structure:

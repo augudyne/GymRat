@@ -30,6 +30,7 @@ A simple workout logging application
 
 -   Add exerciseName input suggestions via AutoCompleteTextView
 -   Selecting an exercise will update the remaining available information in the exercise prompt
+-   Added IO (read/write) for ExerciseManager, WorkoutManager, and WorkoutLogManager
 
 1.  TODO Implement a paired entry of reps with weight input
 
