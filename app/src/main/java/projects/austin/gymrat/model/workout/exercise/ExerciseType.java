@@ -1,4 +1,4 @@
-package projects.austin.gymrat.model.Workout.Exercise;
+package projects.austin.gymrat.model.workout.exercise;
 
 /**
  * Created by Austin on 2017-05-02.

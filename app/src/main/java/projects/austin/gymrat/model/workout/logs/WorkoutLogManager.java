@@ -1,4 +1,4 @@
-package projects.austin.gymrat.model.Logs;
+package projects.austin.gymrat.model.workout.logs;
 
 import org.json.JSONArray;
 import org.json.JSONException;

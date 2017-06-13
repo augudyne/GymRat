@@ -21,13 +21,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import projects.austin.gymrat.model.Logs.WorkoutInstance;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Logs.WorkoutLogManager;
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
-import projects.austin.gymrat.model.Workout.Workout;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstance;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.workout.logs.WorkoutLogManager;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.ExerciseManager;
+import projects.austin.gymrat.model.workout.exercise.ExerciseType;
 
 /**
  * Created by Austin on 2017-05-05.
@@ -82,7 +81,7 @@ public class WorkoutLogIO {
      * @param cxt The Context that wants to save logs
      * @return true if handled, otherwise false
      */
-    public boolean writeLogsToFile(Context cxt){
+    public static boolean writeLogsToFile(Context cxt){
         try {
             OutputStream fileOutput = cxt.openFileOutput(WORKOUT_LOGS_FILE_NAME, Context.MODE_PRIVATE);
             String toWrite = WorkoutLogManager.getInstance().toJSONArray().toString();

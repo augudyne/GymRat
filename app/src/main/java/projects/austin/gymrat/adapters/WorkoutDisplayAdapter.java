@@ -12,11 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
 
 /**
  * Created by Austin on 2017-05-02.

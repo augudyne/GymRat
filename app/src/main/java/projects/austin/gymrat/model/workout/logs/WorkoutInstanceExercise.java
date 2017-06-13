@@ -1,4 +1,4 @@
-package projects.austin.gymrat.model.Logs;
+package projects.austin.gymrat.model.workout.logs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.ExerciseType;
 import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
 
 /**

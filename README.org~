@@ -1,6 +1,46 @@
 * GymRat
   A simple workout logging application
 ** Commits
+*** June 7th 2017
+    - Added an exercise manager, and IO (only input is done, need to complete save to disk feature)
+    - Reconfigured Workout and WorkoutInstance structure:
+      - A Workout consists of: A name, and a list of exercises (string). *THAT IS ALL*
+	#+BEGIN_SRC python
+           {
+               "Name": "Some Name",
+               "Tags": ["Some value", "Some other value"],
+               "Exercises": ["String key for exercise1", "String key for exercise2"]
+           }
+	#+END_SRC 
+
+      - A WorkoutInstance consists of: A name, a list of reps, and rest
+	#+BEGIN_SRC python
+          {
+                "Name":"Default_Chest2",
+                "ExerciseList":[
+                  {
+                    "Name":"Bench Press",
+                    "Reps":[
+                      12,
+                      10,
+                      8,
+                      8,
+                      5
+                    ],
+                    "Rest": 60
+                  }
+                ],
+                "Tags": ["Chest"]
+          }
+	#+END_SRC
+      - Exercise information must be pulled from exerciseManager, using the name as a key
+	#+BEGIN_SRC python
+          {
+              "Name": "Run",
+              "Description": "Lift legs off the ground in alternating sequence. ",
+              "Type": "CARDIO_FREE"
+          }
+	#+END_SRC
 *** May 27th 2017
     - Refactored project as GymRat (changed graphics accordingly)
     - Added NewWorkoutFragment, allowing user to create and add new workout

@@ -1,8 +1,15 @@
-package projects.austin.gymrat.model.Workout.Exercise;
+package projects.austin.gymrat.model.workout.exercise;
 
+import org.json.JSONArray;
+import org.json.JSONTokener;
+
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -13,6 +20,7 @@ import java.util.NoSuchElementException;
 public class ExerciseManager implements Iterable<Exercise> {
     private static ExerciseManager instance;
     private HashMap<String, Exercise> contents;
+    private static final String TAG  = "ExerciseManager";
 
     private ExerciseManager() {
         contents = new HashMap<>();
@@ -56,5 +64,26 @@ public class ExerciseManager implements Iterable<Exercise> {
             contents.put(exerciseToAdd.getName(), exerciseToAdd);
             return true;
         }
+    }
+
+    public JSONArray getInstanceAsJSONArray(){
+        JSONArray result = new JSONArray();
+        for (Exercise e : contents.values()) {
+            result.put(e.toJSONObject());
+        }
+        Log.d(TAG, result.toString());
+
+        return result;
+    }
+
+    public List<String> getExercisesContainsString(String key){
+        List<String> result = new ArrayList<>();
+        for (String s : contents.keySet()) {
+            if(s.toLowerCase().contains(key.toLowerCase())){
+                result.add(s);
+            }
+        }
+
+        return result;
     }
 }

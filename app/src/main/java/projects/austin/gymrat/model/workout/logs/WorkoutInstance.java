@@ -1,6 +1,4 @@
-package projects.austin.gymrat.model.Logs;
-
-import android.content.Context;
+package projects.austin.gymrat.model.workout.logs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,15 +6,14 @@ import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Workout;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.Workout;
 import projects.austin.gymrat.model.exceptions.ExerciseNotFoundException;
 import projects.austin.gymrat.model.exceptions.InvalidRepIndexException;
 

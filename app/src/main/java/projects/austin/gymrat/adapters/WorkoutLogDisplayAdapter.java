@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Logs.WorkoutInstance;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstance;
 
 /**
  * Created by Austin on 2017-05-08.

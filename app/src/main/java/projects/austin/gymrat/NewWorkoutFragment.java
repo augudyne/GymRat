@@ -9,18 +9,23 @@ import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.CompletionInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,10 +33,12 @@ import java.util.List;
 
 import projects.austin.gymrat.adapters.NewExerciseRepsAdapter;
 import projects.austin.gymrat.adapters.WorkoutDisplayAdapter;
-import projects.austin.gymrat.model.Logs.WorkoutInstance;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.ExerciseManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstance;
+import projects.austin.gymrat.model.workout.exercise.ExerciseType;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.workout.WorkoutManager;
 
 
 /**
@@ -221,12 +228,14 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment {
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 View promptView = getActivity().getLayoutInflater().inflate(R.layout.form_add_exercise, null);
-                final EditText nameInput = (EditText) promptView.findViewById(R.id.txt_ExerciseName);
+                final AutoCompleteTextView nameInput = (AutoCompleteTextView) promptView.findViewById(R.id.txt_ExerciseName);
                 final EditText descInput = (EditText) promptView.findViewById(R.id.txt_ExerciseDescription);
                 final EditText restInterval = (EditText) promptView.findViewById(R.id.txt_RestInterval);
                 final RecyclerView setsView = (RecyclerView) promptView.findViewById(R.id.rv_Sets);
                 final Spinner spinnerSelection = (Spinner) promptView.findViewById(R.id.spn_ExerciseType);
+                //setup ExerciseType Spinner
                 spinnerSelection.setAdapter(new ArrayAdapter<>(getContext(), R.layout.workout_selection_item, ExerciseType.values()));
+                //setup sets and reps RecyclerView
                 Button addSet = (Button) promptView.findViewById(R.id.btn_AddSet);
                 addSet.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -243,18 +252,64 @@ public class NewWorkoutFragment extends android.support.v4.app.Fragment {
                 });
                 setsView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
                 setsView.setAdapter(new NewExerciseRepsAdapter());
+                //link the view to the AlertDialog
                 builder.setView(promptView);
                 builder.setPositiveButton("Add", null);
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getContext(), "This feature has not been implemented", Toast.LENGTH_SHORT).show();
                         dialogInterface.cancel();
                     }
                 });
 
+
+                //setup the Exercise Name auto-completion (search)
+                final ArrayAdapter<String> exerciseNameSuggestionsAdapter = new ArrayAdapter<>(getContext(), R.layout.string_display_layout);
+                nameInput.setAdapter(exerciseNameSuggestionsAdapter);
+                nameInput.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        String searchString = nameInput.getText().toString();
+                        List<String> listOfSuggestions = ExerciseManager.getInstance().getExercisesContainsString(searchString);
+                        //set the adapter to display these suggestions
+                        exerciseNameSuggestionsAdapter.clear();
+                        exerciseNameSuggestionsAdapter.addAll(listOfSuggestions);
+                    }
+                });
+
+                nameInput.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        //user selected a suggestion, update the information to reflect the exercise found
+                        String exerciseString = (String) adapterView.getAdapter().getItem(i);
+                        Exercise exerciseFound = ExerciseManager.getInstance().getExercise(exerciseString);
+                        descInput.setText(exerciseFound.getDescription());
+                        //select the exerciseType in the spinner
+                        SpinnerAdapter adapter = spinnerSelection.getAdapter();
+                        for(int j = 0; j  < adapter.getCount(); j++ ){
+                            if(adapter.getItem(j).equals(exerciseFound.getExerciseType())){
+                                spinnerSelection.setSelection(j);
+                                break;
+                            }
+                        }
+                    }
+                });
+
+
+
                 final AlertDialog myDialog = builder.create();
                 myDialog.show();
+                //Immediate override method to prevent closing the prompt if input is invalid
                 myDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

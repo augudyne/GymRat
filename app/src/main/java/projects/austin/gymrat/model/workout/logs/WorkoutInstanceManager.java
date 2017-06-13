@@ -1,8 +1,8 @@
-package projects.austin.gymrat.model.Logs;
+package projects.austin.gymrat.model.workout.logs;
 
 import android.util.Log;
 
-import projects.austin.gymrat.model.Workout.Workout;
+import projects.austin.gymrat.model.workout.Workout;
 
 /**
  * Created by Austin on 2017-05-11.

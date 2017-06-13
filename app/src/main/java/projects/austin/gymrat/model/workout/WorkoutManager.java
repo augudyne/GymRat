@@ -1,4 +1,4 @@
-package projects.austin.gymrat.model.Workout;
+package projects.austin.gymrat.model.workout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
 
 /**
  * Created by Austin on 2017-05-02.

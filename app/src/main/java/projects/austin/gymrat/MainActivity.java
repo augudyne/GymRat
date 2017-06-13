@@ -15,8 +15,8 @@ import android.view.View;
 
 import org.json.JSONArray;
 
-import projects.austin.gymrat.model.Logs.WorkoutLogManager;
-import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutLogManager;
+import projects.austin.gymrat.model.workout.WorkoutManager;
 import projects.austin.gymrat.providers.ExerciseIO;
 import projects.austin.gymrat.providers.WorkoutLogIO;
 import projects.austin.gymrat.providers.WorkoutsIO;
@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         //save my workouts to the file
-        JSONArray workoutsAsJSON = WorkoutLogManager.getInstance().toJSONArray();
-        WorkoutLogIO.getInstance().writeLogsToFile(this);
+        ExerciseIO.writeLogsToFile(this);
+        WorkoutsIO.writeWorkoutsToFile(this);
+        WorkoutLogIO.writeLogsToFile(this);
     }
 
     @Override

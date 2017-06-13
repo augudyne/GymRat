@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.model.workout.WorkoutManager;
 
 
 /**

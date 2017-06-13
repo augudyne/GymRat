@@ -1,6 +1,9 @@
 package projects.austin.gymrat.providers;
 
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
+import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,16 +13,16 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.ExerciseManager;
+import projects.austin.gymrat.model.workout.exercise.ExerciseType;
 
 /**
  * Created by Austin on 2017-06-07.
@@ -105,5 +108,20 @@ public class ExerciseIO {
     }
 
     //TODO: Save function (database out, save to file)
+    public static boolean writeLogsToFile(Context ctx){
+        ExerciseManager manager = ExerciseManager.getInstance();
+        JSONArray arrayOfExercises = manager.getInstanceAsJSONArray();
+        try {
+            OutputStream os = ctx.openFileOutput(EXERCISE_FILE, Context.MODE_PRIVATE);
+            os.write(arrayOfExercises.toString().getBytes());
+            os.close();
+            return true;
+        } catch (IOException ioe){
+            System.out.println("Unable to locate exercise.json in program path");
+            Toast.makeText(ctx, "Unable to save exercises to disk", Toast.LENGTH_LONG).show();
+            ioe.printStackTrace();
+            return false;
+        }
+    }
 
 }

@@ -15,11 +15,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import projects.austin.gymrat.adapters.WorkoutInstanceDisplayAdapter;
-import projects.austin.gymrat.model.Logs.WorkoutInstance;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceManager;
-import projects.austin.gymrat.model.Logs.WorkoutLogManager;
-import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstance;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutLogManager;
+import projects.austin.gymrat.model.workout.WorkoutManager;
 import projects.austin.gymrat.providers.WorkoutLogIO;
 
 
@@ -96,7 +96,7 @@ public class WorkoutInstanceFragment extends Fragment {
                 WorkoutInstanceDisplayAdapter myAdapter = (WorkoutInstanceDisplayAdapter) adapterView.getAdapter();
                 WorkoutInstanceExercise myExercise =  myAdapter.getItem(i);
                 Log.d(TAG_FRAGMENT, myExercise.toString());
-                if(myExercise != null && myExercise.getRestInterval() != 0){
+                if(myExercise.getRestInterval() != 0){
                     FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.fragment_layout_container, TimerFragment.newInstance(myExercise.getRestInterval()));
                     ft.addToBackStack(null);
@@ -116,7 +116,7 @@ public class WorkoutInstanceFragment extends Fragment {
                 WorkoutLogManager.getInstance().addWorkoutInstance(workoutToSave);
 
                 Log.d(TAG_FRAGMENT, workoutToSave.toJSONObject().toString());
-                WorkoutLogIO.getInstance().writeLogsToFile(getContext());
+                WorkoutLogIO.writeLogsToFile(getContext());
                 Toast.makeText(getContext(), "Saved workout instance " + workoutName, Toast.LENGTH_SHORT).show();
             }
         });

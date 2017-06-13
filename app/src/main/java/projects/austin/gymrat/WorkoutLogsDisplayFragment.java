@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import projects.austin.gymrat.adapters.WorkoutLogDisplayAdapter;
-import projects.austin.gymrat.model.Logs.WorkoutLogManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutLogManager;
 import projects.austin.gymrat.providers.WorkoutLogIO;
 
 

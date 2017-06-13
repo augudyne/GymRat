@@ -1,4 +1,4 @@
-package projects.austin.gymrat.model.Workout;
+package projects.austin.gymrat.model.workout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.ExerciseManager;
 
 /**
  * Created by Austin on 2017-05-02.

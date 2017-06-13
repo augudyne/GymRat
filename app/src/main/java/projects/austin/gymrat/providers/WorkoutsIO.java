@@ -16,12 +16,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseManager;
-import projects.austin.gymrat.model.Workout.Exercise.ExerciseType;
-import projects.austin.gymrat.model.Workout.Workout;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.exercise.ExerciseManager;
+import projects.austin.gymrat.model.workout.Workout;
+import projects.austin.gymrat.model.workout.WorkoutManager;
 
 /**
  * Created by Austin on 2017-05-02.
@@ -179,6 +177,26 @@ public class WorkoutsIO {
                 System.out.println("This is very bad, the default raw workout json is corrupted");
             }
             return false;
+        }
+    }
+
+    public static boolean writeWorkoutsToFile(Context ctx){
+        try {
+            OutputStream os = ctx.openFileOutput(WORKOUTS_FILE_NAME, Context.MODE_PRIVATE);
+            //get the array of workouts to write to file
+            WorkoutManager wm = WorkoutManager.getInstance();
+            JSONArray arrayOfWorkouts = new JSONArray();
+            for(Workout wo : wm){
+                arrayOfWorkouts.put(wo.toJSONObject());
+            }
+            os.write(arrayOfWorkouts.toString().getBytes());
+            os.close();
+            return true;
+        } catch (IOException ioe){
+            System.out.println("An IOException occured");
+            ioe.printStackTrace();
+            return false;
+
         }
     }
 }

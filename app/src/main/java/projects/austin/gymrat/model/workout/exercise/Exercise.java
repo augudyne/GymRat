@@ -1,4 +1,4 @@
-package projects.austin.gymrat.model.Workout.Exercise;
+package projects.austin.gymrat.model.workout.exercise;
 
 import org.json.JSONException;
 import org.json.JSONObject;

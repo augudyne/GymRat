@@ -15,8 +15,8 @@ import android.widget.EditText;
 import java.util.List;
 import java.util.Locale;
 
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceManager;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceManager;
 
 /**
  * Created by Austin on 2017-05-11.

@@ -6,11 +6,12 @@
 <ul>
 <li><a href="#sec-1-1">1.1. Commits</a>
 <ul>
-<li><a href="#sec-1-1-1">1.1.1. June 7th 2017</a></li>
-<li><a href="#sec-1-1-2">1.1.2. May 27th 2017</a></li>
-<li><a href="#sec-1-1-3">1.1.3. May 12th 2017</a></li>
-<li><a href="#sec-1-1-4">1.1.4. May 8th 2017</a></li>
-<li><a href="#sec-1-1-5">1.1.5. May 2nd 2017</a></li>
+<li><a href="#sec-1-1-1">1.1.1. June 12th 2017</a></li>
+<li><a href="#sec-1-1-2">1.1.2. June 7th 2017</a></li>
+<li><a href="#sec-1-1-3">1.1.3. May 27th 2017</a></li>
+<li><a href="#sec-1-1-4">1.1.4. May 12th 2017</a></li>
+<li><a href="#sec-1-1-5">1.1.5. May 8th 2017</a></li>
+<li><a href="#sec-1-1-6">1.1.6. May 2nd 2017</a></li>
 </ul>
 </li>
 </ul>
@@ -25,7 +26,14 @@ A simple workout logging application
 
 ## Commits<a id="sec-1-1" name="sec-1-1"></a>
 
-### June 7th 2017<a id="sec-1-1-1" name="sec-1-1-1"></a>
+### June 12th 2017<a id="sec-1-1-1" name="sec-1-1-1"></a>
+
+-   Add exerciseName input suggestions via AutoCompleteTextView
+-   Selecting an exercise will update the remaining available information in the exercise prompt
+
+1.  TODO Implement a paired entry of reps with weight input
+
+### June 7th 2017<a id="sec-1-1-2" name="sec-1-1-2"></a>
 
 -   Added an exercise manager, and IO (only input is done, need to complete save to disk feature)
 -   Reconfigured Workout and WorkoutInstance structure:
@@ -64,7 +72,7 @@ A simple workout logging application
                 "Type": "CARDIO_FREE"
             }
 
-### May 27th 2017<a id="sec-1-1-2" name="sec-1-1-2"></a>
+### May 27th 2017<a id="sec-1-1-3" name="sec-1-1-3"></a>
 
 -   Refactored project as GymRat (changed graphics accordingly)
 -   Added NewWorkoutFragment, allowing user to create and add new workout
@@ -74,21 +82,21 @@ A simple workout logging application
 -   Added long-click menu for workout selection, replacing spinner with ListView
 -   Timer toggle allows user to switch in between viewing exercises, and a rest timer with reset button fragment.
 
-### May 12th 2017<a id="sec-1-1-3" name="sec-1-1-3"></a>
+### May 12th 2017<a id="sec-1-1-4" name="sec-1-1-4"></a>
 
 Replaced clunky addSet feature by adding a WorkoutInstanceManager
 -   **WorkoutInstanceManager:** Essentially a cached version of the current WorkoutInstance. Allows modification for database IO, and retaining context on fragment navigation
 
 Use recyclerView for display of editTexts - with InputFilters to only allow #s
 
-### May 8th 2017<a id="sec-1-1-4" name="sec-1-1-4"></a>
+### May 8th 2017<a id="sec-1-1-5" name="sec-1-1-5"></a>
 
 Added workoutLogging functionality
 -   **WorkoutInstance:** Extends the workout type, but has a date associated with the workout
 -   **WorkoutInstanceExercise:** Extends Exercise, has a list of reps associated with it
 -   **DatabaseIO:** Allows storage of workout and workoutLogs as .json file on local file. Methods locally have a toJSONObject method
 
-### May 2nd 2017<a id="sec-1-1-5" name="sec-1-1-5"></a>
+### May 2nd 2017<a id="sec-1-1-6" name="sec-1-1-6"></a>
 
 Initial commit
 -   **Workout:** Consists a name, an arbitrary length list of exercises, and an arbitrary length list of associated tags

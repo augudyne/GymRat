@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projects.austin.gymrat.R;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceExercise;
+import projects.austin.gymrat.model.workout.logs.WorkoutInstanceExercise;
 
 /**
  * Created by Austin on 2017-05-05.

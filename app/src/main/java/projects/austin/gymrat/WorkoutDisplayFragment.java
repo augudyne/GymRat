@@ -14,11 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import projects.austin.gymrat.adapters.WorkoutDisplayAdapter;
-import projects.austin.gymrat.model.Logs.WorkoutInstanceManager;
-import projects.austin.gymrat.model.Workout.Exercise.Exercise;
-import projects.austin.gymrat.model.Workout.Workout;
+import projects.austin.gymrat.model.workout.exercise.Exercise;
+import projects.austin.gymrat.model.workout.Workout;
 
-import projects.austin.gymrat.model.Workout.WorkoutManager;
+import projects.austin.gymrat.model.workout.WorkoutManager;
 
 
 /**
